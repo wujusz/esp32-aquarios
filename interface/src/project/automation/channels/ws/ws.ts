@@ -1,3 +1,3 @@
 export interface ChannelStateWebSocketFormProps {
-    websocketEndPoint: string;
+    channelId: string;
 }

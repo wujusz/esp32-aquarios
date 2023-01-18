@@ -10,7 +10,8 @@ import { ChannelState} from '../../redux/types/channel';
 import { RemoteUtils } from '../../utils/remoteUtils';
 import { ChannelStateWebSocketFormProps } from './ws';
 
-const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({websocketEndPoint}) => {
+const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({channelId}) => {
+  const websocketEndPoint = `channel${channelId}State`;
   const { connected, updateData, data } = useWs<ChannelState>(`${RemoteUtils.getWsBaseAddress()}${websocketEndPoint}`);
   const updateFormValue = updateValue(updateData);
   const pathname = useLocation().pathname;

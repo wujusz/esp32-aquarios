@@ -11,17 +11,27 @@ import MessageIcon from '@mui/icons-material/Message';
 import { ThemeProvider } from '@mui/material/styles';
 import type {} from '@mui/lab/themeAugmentation';
 import { MuiThemeOverride } from './themeOverrides';
-
 import { useLayoutTitle } from '../../../components';
 
-import ChannelOneStateRestForm from './rest/ChannelOneStateRestForm';
-import ChannelOneMqttSettingsForm from './mqtt/ChannelOneMqttSettingsForm';
-import ChannelOneStateWebSocketForm from './ws/ChannelOneStateWebSocketForm';
+import ChannelStateForm from './rest/ChannelStateForm';
+import ChannelMqttSettingsForm from './mqtt/ChannelMqttSettingsForm';
+import ChannelStateWebSocketForm from './ws/ChannelStateWebSocketForm';
 
-const ChannelOne: FC = () => {
-  useLayoutTitle("Automation");
+const ChannelDetails: FC = () => {
+  useLayoutTitle("Channel details");
 
+  
   const [value, setValue] = React.useState('1');
+  const id = (new URLSearchParams(window.location.search)).get("id");
+  
+  function isEmpty (str: string |null) {
+    if(str === null){
+      return 'Two';
+    } 
+
+    return str;
+  };
+  const channelId = isEmpty(id);
 
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: string) => {
     setValue(newValue);
@@ -33,14 +43,14 @@ const ChannelOne: FC = () => {
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label="Channel">
-                <Tab icon={<AccessAlarmIcon/>} label="Schedule" value="1" />
+                <Tab icon={<AccessAlarmIcon/>} label="Details" value="1" />
                 <Tab icon={<BlurCircularIcon/>} label="Status" value="2" />
                 <Tab icon={<MessageIcon/>} label="Mqtt" value="3" disabled={false} />
               </TabList>
             </Box>
-            <TabPanel value="1"><ChannelOneStateRestForm/></TabPanel>
-            <TabPanel value="2"><ChannelOneStateWebSocketForm/></TabPanel>
-            <TabPanel value="3"><ChannelOneMqttSettingsForm/></TabPanel>
+            <TabPanel value="1"><ChannelStateForm channelId={channelId}/></TabPanel>
+            <TabPanel value="2"><ChannelStateWebSocketForm channelId={channelId}/></TabPanel>
+            <TabPanel value="3"><ChannelMqttSettingsForm channelId={channelId}/></TabPanel>
           </TabContext>
         </Box>
       </ThemeProvider>
@@ -48,4 +58,4 @@ const ChannelOne: FC = () => {
   );
 };
 
-export default ChannelOne;
+export default ChannelDetails;

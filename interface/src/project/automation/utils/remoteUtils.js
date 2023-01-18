@@ -100,7 +100,9 @@ export class RemoteUtils {
       const path = endPoint.split('/').pop();
       let navToUrl = `/project/${route}/${path}`;
       const state = "State";
-      return(navToUrl.substring(0, navToUrl.length - state.length));
+      const url = (navToUrl.substring(0, navToUrl.length - state.length));
+      console.log('urlNavigation', url);
+      return url;
     }
 
     static getApiBaseAddress() {

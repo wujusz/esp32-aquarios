@@ -1,9 +1,11 @@
 import { AxiosPromise } from 'axios';
-
 import { AXIOS } from '../../../api/endpoints';
 import { RemoteUtils } from '../utils/remoteUtils';
-import { ChannelState } from '../redux/types/channel';
+import { Channels, ChannelState } from '../redux/types/channel';
 import { ChannelMqttSettings } from '../redux/types/mqtt';
+
+// export const channels = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Teen', 'Eleven', 'Twelve'];
+export const channels = ['One', 'Two', 'Three', 'Four'];
 
 export const createReadChannelApi = (channelId: string): AxiosPromise<ChannelState> => {
      return AXIOS.get(`${RemoteUtils.getApiBaseAddress()}channel${channelId}State`);
@@ -17,8 +19,11 @@ export const createReadChannelBrokerSettingsApi = (channelId: string): AxiosProm
      return AXIOS.get(`${RemoteUtils.getApiBaseAddress()}Channel${channelId}BrokerSettings`);
 };
 
-export const createUpdateChannelBrokerSettingsApi = (
-    channelId: string, channelMqttSettings: ChannelMqttSettings): AxiosPromise<ChannelMqttSettings> => {
+export const createUpdateChannelBrokerSettingsApi = 
+(channelId: string, channelMqttSettings: ChannelMqttSettings): AxiosPromise<ChannelMqttSettings> => {
      return AXIOS.post(`${RemoteUtils.getApiBaseAddress()}Channel${channelId}BrokerSettings`, channelMqttSettings);
 };
 
+export const createReadChannelsApi = (): AxiosPromise<Channels> => {
+     return AXIOS.get(`${RemoteUtils.getApiBaseAddress()}channels`);
+}
