@@ -58,6 +58,10 @@ export interface ChannelState {
   channelId: string;
 }
 
+export interface ChannelList {
+  channels: ChannelState[]
+}
+
 export interface ChannelStateFuncs {
   onRestartChannelSchedule: RestartChannelScheduleType;
   onSetChannelSettings: SetChannelSettingsType;

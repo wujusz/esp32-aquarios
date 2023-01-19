@@ -97,11 +97,10 @@ export class RemoteUtils {
     }
 
     static getNavigationLink(route, endPoint){
-      const path = endPoint.split('/').pop();
+      const path = endPoint.split('/').pop().replace(/([A-Z])/g, '/$1').trim();
       let navToUrl = `/project/${route}/${path}`;
       const state = "State";
       const url = (navToUrl.substring(0, navToUrl.length - state.length));
-      console.log('urlNavigation', url);
       return url;
     }
 

@@ -1,23 +1,16 @@
 
-import React, { FC, useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import { ThemeProvider } from '@mui/material/styles';
+import { FC, useEffect, useState } from 'react';
 import type { } from '@mui/lab/themeAugmentation';
-import { MuiThemeOverride } from './themeOverrides';
+// import { MuiThemeOverride } from './themeOverrides';
 import { useNavigate } from 'react-router-dom';
-import { useLayoutTitle, ButtonRow, FormLoader, MessageBox, SectionContent } from '../../../components';
+import { useLayoutTitle, SectionContent } from '../../../components';
 
 import {
-  Button, IconButton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow
+  IconButton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Link } from 'react-router-dom';
 
 import * as ChannelApi from '../api/channelApi';
 import { RemoteUtils } from '../utils/remoteUtils';
@@ -26,6 +19,7 @@ const ChannelListForm: FC = () => {
   const [ list, setList ] = useState<any[]>([]);
   const navigate = useNavigate();  
   const channelUrl = (path: string) => navigate(RemoteUtils.getNavigationLink('auto', path));
+
   const getChannelData = async (channelId: string) => {
     try {
       const response = await ChannelApi.createReadChannelApi(channelId);
@@ -42,7 +36,7 @@ const ChannelListForm: FC = () => {
     })
   }, [])
 
-  useLayoutTitle("Automation");
+  useLayoutTitle("Channels");
 
   const content = () => {
     if (!list) {
@@ -50,8 +44,7 @@ const ChannelListForm: FC = () => {
     }
 
     const showChannel = (channelUrl: string) => {
-      console.log('showChannel', channelUrl);
-      return navigate(RemoteUtils.getNavigationLink('auto', channelUrl));
+
     }
 
     return (
@@ -86,7 +79,7 @@ const ChannelListForm: FC = () => {
                   <TableCell align='center'>{channel.controlPin}</TableCell>
                   <TableCell align='center'>{channel.homeAssistantTopicType}</TableCell>
                   <TableCell align="center">
-                    <IconButton size="small" aria-label="Show" onClick={() => showChannel(channel)}>
+                    <IconButton size="small" aria-label="Show" onClick={() => showChannel}>
                       <EditIcon />
                     </IconButton>
                   </TableCell>

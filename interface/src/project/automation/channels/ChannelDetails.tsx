@@ -16,22 +16,14 @@ import { useLayoutTitle } from '../../../components';
 import ChannelStateForm from './rest/ChannelStateForm';
 import ChannelMqttSettingsForm from './mqtt/ChannelMqttSettingsForm';
 import ChannelStateWebSocketForm from './ws/ChannelStateWebSocketForm';
+import { useParams } from 'react-router-dom';
 
 const ChannelDetails: FC = () => {
   useLayoutTitle("Channel details");
 
-  
+  const { id } = useParams();  
   const [value, setValue] = React.useState('1');
-  const id = (new URLSearchParams(window.location.search)).get("id");
-  
-  function isEmpty (str: string |null) {
-    if(str === null){
-      return 'Two';
-    } 
-
-    return str;
-  };
-  const channelId = isEmpty(id);
+  const channelId = id ? id : "One";
 
   const handleChange = (_event: React.ChangeEvent<{}>, newValue: string) => {
     setValue(newValue);
