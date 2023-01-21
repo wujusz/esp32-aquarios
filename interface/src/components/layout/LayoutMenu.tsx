@@ -39,6 +39,7 @@ const LayoutMenu: FC = () => {
           <LayoutMenuItem icon={LockIcon} label="Security" to="/security" disabled={!authenticatedContext.me.admin} />
         )}
         <LayoutMenuItem icon={SettingsIcon} label="System" to="/system" />
+        <LayoutMenuItem icon={SettingsIcon} label="File Manager" to="/files" />
       </List>
     </>
   );
