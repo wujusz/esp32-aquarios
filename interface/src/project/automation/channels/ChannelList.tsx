@@ -15,8 +15,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import * as ChannelApi from '../api/channelApi';
 import { RemoteUtils } from '../utils/remoteUtils';
 
-import listReactFiles from 'list-react-files';
-
 const ChannelListForm: FC = () => {
   const [ list, setList ] = useState<any[]>([]);
   const navigate = useNavigate();  
@@ -47,9 +45,6 @@ const ChannelListForm: FC = () => {
 
     const showChannel = (channelUrl: string) => {
 
-      listReactFiles('/').then((files: any) => {
-        console.log(files);
-      })
     }
 
     return (
