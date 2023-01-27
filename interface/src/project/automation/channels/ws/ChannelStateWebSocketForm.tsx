@@ -20,7 +20,6 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({channelI
   const navigate  = useNavigate ();
   const onClick = () => navigate(RemoteUtils.getNavigationLink('auto', data?.restChannelEndPoint));
   const switchType = 2; //led type switch
-  
   const content = () => {
     if (!connected || !data) {
       return (<FormLoader message="Connecting to WebSocket…" />);

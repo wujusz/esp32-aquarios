@@ -11,8 +11,10 @@
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/xtensa_api.h"
 #include "driver/ledc.h"
 #include "esp_err.h"
+#include "channels.h"
 #include "esp32-hal-ledc.h"
 
 class ChannelStateService : public StatefulService<ChannelState> {
@@ -120,6 +122,7 @@ class ChannelStateService : public StatefulService<ChannelState> {
   void registerPinConfig(uint8_t controlPin, uint8_t homeAssistantTopicType);
   void onConfigUpdated();
   void updateStateIP(String IPAddress);
+  void onSetupBrightness();
   void onChangeBrightness();
 };
 #endif

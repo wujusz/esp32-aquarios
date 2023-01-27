@@ -1,4 +1,3 @@
-#include "channels.h"
 #include "ChannelStateService.h"
 
 ChannelStateService::ChannelStateService(AsyncWebServer* server,
@@ -146,10 +145,6 @@ void ChannelStateService::onStationModeDisconnected(const WiFiEventStationModeDi
 
 #endif
 
-void ChannelStateService::onConfigUpdated() {
-  digitalWrite(_state.channel.controlPin, _state.channel.controlOn ? CONTROL_ON : CONTROL_OFF);
-}
-
 void ChannelStateService::registerPinConfig(uint8_t controlPin, uint8_t homeAssistantTopicType) {
   if (!_mqttClient->connected()) {
     return;
@@ -161,7 +156,6 @@ void ChannelStateService::registerPinConfig(uint8_t controlPin, uint8_t homeAssi
   DynamicJsonDocument doc(DEFAULT_JSON_DOCUMENT_SIZE);
   _channelMqttSettingsService->read([&](ChannelMqttSettings& settings) {
     String mqttPath = utils.getMqttUniqueIdOrPath(controlPin, homeAssistantTopicType, false, settings.homeAssistantEntity);
-
     String uniqueId = utils.getMqttUniqueIdOrPath(controlPin, homeAssistantTopicType, true);
 
     String name;
@@ -190,6 +184,7 @@ void ChannelStateService::registerPinConfig(uint8_t controlPin, uint8_t homeAssi
         break;
       case HOMEASSISTANT_TOPIC_TYPE_LED:
         doc["brightness"] = _state.channel.brightness;
+        doc["schema"] = "json";
         break;
       default:
         doc["schema"] = "json";
@@ -206,10 +201,6 @@ void ChannelStateService::registerPinConfig(uint8_t controlPin, uint8_t homeAssi
 }
 
 void ChannelStateService::registerConfig() {
-  /*Serial.println(F("ChannelStateService::registerConfig"));
-  Serial.println(" - name: "+_state.channel.name);
-  Serial.println(" - controlPin: "+_state.channel.controlPin);
-  Serial.println(" - id: "+ _state.channel.channelId);*/
   registerPinConfig(_state.channel.controlPin, _state.channel.homeAssistantTopicType);
 }
 
@@ -220,7 +211,7 @@ void ChannelStateService::onChangeBrightness() {
   uint32_t duty = (4095 / valueMax) * min(brightness, valueMax);
 
   // write duty to LEDC
-  // ledcWrite(_state.channel.channelId, duty);
+  ledcWrite(_state.channel.analogChannel, duty);
 }
 
 void ChannelStateService::mqttUnregisterConfig(uint8_t controlPin, uint8_t homeAssistantTopicType) {
@@ -318,9 +309,34 @@ void ChannelStateService::begin() {
     _fsPersistence.readFromFS();
     _state.channel.controlOn = DEFAULT_CONTROL_STATE; // must be off on start up
     onConfigUpdated();
+    onSetupBrightness();
     _channelMqttSettingsService->begin();
     _deviceTime.attach(15, updateStateTimeTicker, this);
     _mqttRepublish.attach(5, mqttRepublishTicker, this);
+}
+
+void ChannelStateService::onSetupBrightness() {
+  // configure LED PWM functionalitites
+  ledcSetup(_state.channel.analogChannel, DEFAULT_BRIGHTNESS_FREQ, DEFAULT_BRIGHTNESS_BIT);
+  
+  // attach the channel to the GPIO to be controlled
+  ledcAttachPin(_state.channel.controlPin, _state.channel.analogChannel);
+
+  uint32_t valueMax = 255;
+  uint32_t brightness = (int)(_state.channel.brightness * 2.55);
+  // calculate duty, 4095 from 2 ^ 12 - 1
+  uint32_t duty = (4095 / valueMax) * min(brightness, valueMax);
+
+  ledcWrite(_state.channel.analogChannel, duty);
+}
+
+void ChannelStateService::onConfigUpdated() {
+
+  if(_state.channel.homeAssistantTopicType == 2){
+    onChangeBrightness();
+  } else {
+    digitalWrite(_state.channel.controlPin, _state.channel.controlOn ? CONTROL_ON : CONTROL_OFF);
+  }
 }
 
 Channel ChannelStateService::getChannel(){
