@@ -42,7 +42,6 @@ struct ScheduleTask {
     int blinkLed;
     int ledOn;
     int brightness;
-    int channelId;
 }; 
 
 struct SystemRestart {

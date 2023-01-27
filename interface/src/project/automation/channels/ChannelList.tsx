@@ -23,7 +23,6 @@ const ChannelListForm: FC = () => {
   const getChannelData = async (channelId: string) => {
     try {
       const response = await ChannelApi.createReadChannelApi(channelId);
-      response.data.channelId = channelId;
         return response.data;
       } catch (error) {
         console.error(error);

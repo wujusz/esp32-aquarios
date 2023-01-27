@@ -69,7 +69,6 @@ struct Channel {
     uint8_t controlPin;
     uint8_t homeAssistantTopicType;
     String  homeAssistantIcon;
-    uint8_t channelId;
     int startTime;
     int endTime;
     bool  enabled;

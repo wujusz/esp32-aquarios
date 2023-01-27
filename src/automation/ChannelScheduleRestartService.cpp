@@ -21,12 +21,6 @@ void ChannelScheduleRestartService::scheduleRestart(AsyncWebServerRequest* reque
     AsyncWebParameter* controlPinParamater = request->getParam(NEW_CHANNEL_CONTROL_PIN);
     String controlPin = controlPinParamater->value();
 
-    AsyncWebParameter* oldBrightnessParamater = request->getParam(OLD_CHANNEL_BRIGHTNESS);
-    String oldBrightness = oldBrightnessParamater->value();
-
-    AsyncWebParameter* brightnessParamater = request->getParam(NEW_CHANNEL_BRIGHTNESS);
-    String brightness = brightnessParamater->value();
-
     AsyncWebParameter* oldHomeAssistantTopicTypeParamater = request->getParam(OLD_HA_TOPIC_TYPE);
     String oldHomeAssistantTopicType = oldHomeAssistantTopicTypeParamater->value();
 

@@ -645,10 +645,6 @@ uint8_t TaskScheduler::getBrightness(){
   return _channelStateService.getChannel().brightness;
 }
 
-uint8_t TaskScheduler::getChannelId(){
-  return _channelStateService.getChannel().channelId;
-}
-
 uint8_t TaskScheduler::getChannelHomeAssistantTopicType(){
   return _channelStateService.getChannel().homeAssistantTopicType;
 }

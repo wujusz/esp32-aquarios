@@ -6,32 +6,32 @@ import { ChannelState } from "../../../redux/types/channel";
 
 const DAYS = [
   {
-    key: "sunday",
-    label: "S"
-  },
-  {
     key: "monday",
-    label: "M"
+    label: "MO"
   },
   {
     key: "tuesday",
-    label: "T"
+    label: "TU"
   },
   {
     key: "wednesday",
-    label: "W"
+    label: "WE"
   },
   {
     key: "thursday",
-    label: "T"
+    label: "TH"
   },
   {
     key: "friday",
-    label: "F"
+    label: "FR"
   },
   {
     key: "saturday",
-    label: "S"
+    label: "SA"
+  },
+  {
+    key: "sunday",
+    label: "SU"
   }
 ];
 

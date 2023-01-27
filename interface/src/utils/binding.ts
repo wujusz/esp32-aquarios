@@ -5,6 +5,7 @@ type UpdateEntity<S> = (
 export const numberValue = (value: number) => isNaN(value) ? "" : value.toString();
 
 export const extractEventValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+  console.log('eventBidings', event);
   switch (event.target.type) {
     case "number":
       return event.target.valueAsNumber;

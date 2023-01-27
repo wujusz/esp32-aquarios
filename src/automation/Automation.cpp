@@ -39,7 +39,7 @@ void Automation::ntpSearch(){
 void Automation::staticTickerCallbackChangeBrightness(Automation *pThis)
 {
   Serial.println(F("Automation::staticTickerCallbackChangeBrightness"));
-  pThis->changeBrightness(CHANNEL, LED);
+  // pThis->changeBrightness();
 }
 
 void Automation::setupBrightness(uint32_t channelId, uint32_t controlPin)
@@ -107,7 +107,6 @@ void Automation::setSchedules(std::list<ScheduleTask>* scheduleTaskList){
           _blinkerHeartBeat.attach(2.0, &Automation::staticTickerCallbackTurnLedOn, this);    
           for(std::list<ScheduleTask>::iterator i = scheduleTaskList->begin(); i != scheduleTaskList->end();)
             {
-              Serial.println(F("setSchedules ChannelId: " + i->channelId));
               i->channelTaskScheduler->setSchedule();
               i->channelTaskScheduler->setToggleSwitch(
                 i->bToggleSwitch,

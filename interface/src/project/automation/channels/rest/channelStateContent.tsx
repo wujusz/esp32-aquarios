@@ -156,12 +156,10 @@ export function channelStateContent(data: ChannelState | undefined,
                    />}
           label={(<ScheduleEnabled buildVersion={data.buildVersion} />)}
         />
-        
-        { data.enabled && data.homeAssistantTopicType == 2 && selectBrightness(data, handleBrightness) }
-        { data.enabled && selectWeekDays(data, handleChannelSelectWeekDaysValueChange) }
-        
-        { data.enabled && selectAnalogChannel(data, handleChannelStateValueChange)}
+        {/* { data.homeAssistantTopicType == 2 && selectAnalogChannel(data, handleChannelStateValueChange)} */}
+        { data.homeAssistantTopicType == 2 && selectBrightness(data, handleBrightness) }
 
+        { data.enabled && selectWeekDays(data, handleChannelSelectWeekDaysValueChange) }
 
         {data.enabled && (
           <div>

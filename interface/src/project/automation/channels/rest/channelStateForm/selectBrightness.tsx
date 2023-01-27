@@ -1,7 +1,6 @@
 import { Typography } from '@mui/material';
 import Slider from '@mui/material/Slider';
 import { ChannelState } from '../../../redux/types/channel';
-import { HotTime } from '../../tooltips/HotTime';
 
 function selectBrightnessMarks() {
   let markList = [];
@@ -17,8 +16,6 @@ function selectBrightnessMarks() {
   return markList;
 }
 
-
-
 export function selectBrightness(data: ChannelState, 
 handleBrightnessChange: (event: any, newValue: number | number[]) => void) {
   let marks = selectBrightnessMarks();
@@ -27,6 +24,7 @@ handleBrightnessChange: (event: any, newValue: number | number[]) => void) {
       {data.brightness}%
     </Typography>
     <Slider
+      name="brightness"
       disabled={!data.enabled}
       defaultValue={data.brightness}
       aria-labelledby="discrete-slider-custom"

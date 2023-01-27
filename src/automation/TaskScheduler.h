@@ -125,7 +125,6 @@ class TaskScheduler {
     uint8_t getChannelHomeAssistantTopicType();
     bool getChannelEnableDateRange();
     uint8_t getBrightness();
-    uint8_t getChannelId();
 
     private:
     int _toggleReadPin;

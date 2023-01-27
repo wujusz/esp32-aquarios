@@ -33,7 +33,6 @@ class ChannelStateService : public StatefulService<ChannelState> {
                     int  endTimeMinute,    // 30
                     bool    enabled,
                     int brightness,
-                    int channelId,
                     String  channelName,
                     bool  enableTimeSpan,
                     ChannelMqttSettingsService* channelMqttSettingsService,

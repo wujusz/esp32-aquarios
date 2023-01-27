@@ -55,7 +55,6 @@ export interface ChannelState {
   activeOutsideDateRange: boolean;
   activeDateRange: Array<string>;
   buildVersion: string;
-  channelId: string;
   analogChannel: number;
 }
 

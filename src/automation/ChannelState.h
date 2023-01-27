@@ -129,7 +129,6 @@ static void haRead(ChannelState& settings, JsonObject& root) {
     jsonObject["homeAssistantIcon"] = channel.homeAssistantIcon;
     jsonObject["controlOn"] = channel.controlOn;
     jsonObject["name"] = channel.name;
-    jsonObject["channelId"] = channel.channelId;
     jsonObject["enabled"] = channel.enabled;
     jsonObject["brightness"] = channel.brightness;
     jsonObject["enableTimeSpan"] = channel.enableTimeSpan;
@@ -209,7 +208,6 @@ static void updateChannel(JsonObject& json, Channel& channel) {
     channel.homeAssistantIcon = json["homeAssistantIcon"] | channel.homeAssistantIcon;
     channel.controlOn = json["controlOn"] | DEFAULT_CONTROL_STATE;
     channel.name = json["name"] | channel.name;
-    channel.channelId = json["channelId"] | channel.channelId;
     channel.enabled = json["enabled"] | channel.enabled;
     channel.brightness = json["brightness"] | channel.brightness;
     channel.enableTimeSpan = json["enableTimeSpan"] | channel.enableTimeSpan;

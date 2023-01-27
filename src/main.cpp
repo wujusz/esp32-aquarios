@@ -145,8 +145,8 @@ ESP8266React esp8266React(&server);
  ChannelMqttSettingsService channelFourMqttSettingsService =
     ChannelMqttSettingsService(&server, &SPIFFS, esp8266React.getSecurityManager(),
     CHANNEL_FOUR_BROKER_SETTINGS_FILE, CHANNEL_FOUR_BROKER_SETTINGS_PATH, CHANNEL_FOUR_CONTROL_PIN,
-    CHANNEL_FOUR_DEFAULT_NAME, CHANNEL_FOUR_HOME_ASSISTANT_ENTITY, CHANNEL_FOUR_HOMEASSISTANT_TOPIC_TYPE,
-    CHANNEL_FOUR_HOMEASSISTANT_ICON);
+    CHANNEL_FOUR_DEFAULT_NAME, CHANNEL_FOUR_HOME_ASSISTANT_ENTITY, CHANNEL_FOUR_HOMEASSISTANT_TOPIC_TYPE, CHANNEL_FOUR_HOMEASSISTANT_ICON
+    );
 
  TaskScheduler channelFourTaskScheduler = TaskScheduler(&server,
                                                         esp8266React.getSecurityManager(),
@@ -182,7 +182,8 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_FOUR_ACTIVE_END_DATE_RANGE,
                                                         BUILD_VERSION,
                                                         CHANNEL_FOUR_ACTIVE_WEEK_DAYS,
-                                                        CHANNEL_FOUR_DEFAULT_ID);
+                                                        CHANNEL_FOUR_DEFAULT_ID
+                                                        );
   ChannelScheduleRestartService channelFourScheduleRestartService = ChannelScheduleRestartService(&server, esp8266React.getSecurityManager(), &channelFourTaskScheduler, CHANNEL_FOUR_SCHEDULE_RESTART_SERVICE_PATH);
 #endif
 /* #endregion */
@@ -200,7 +201,6 @@ Automation automation = Automation();
 Schedules schedules = Schedules(&automation);
 
 void setup() {
-  Serial.println(F("SETUP FUNCTION"));
   // start serial and filesystem
   Serial.begin(SERIAL_BAUD_RATE);
 
@@ -208,7 +208,6 @@ void setup() {
   // start the framework and demo project
   esp8266React.begin();
 
-Serial.println(F("set one schedule"));
   /* #region Begin Schedules */
   #if defined(CHANNEL_ONE)
     ScheduleTask scheduleOneTask;
@@ -218,8 +217,6 @@ Serial.println(F("set one schedule"));
     scheduleOneTask.blinkLed = LED;
     scheduleOneTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleOneTask);
-
-    //automation.setupBrightness(CHANNEL_ONE_DEFAULT_ID, CHANNEL_ONE_CONTROL_PIN);
   #endif  
 
   #if defined(CHANNEL_TWO)
@@ -230,7 +227,6 @@ Serial.println(F("set one schedule"));
     scheduleTwoTask.blinkLed = LED;
     scheduleTwoTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleTwoTask);
-    // automation.setupBrightness(channelTwoTaskScheduler.channelId, channelTwoTaskScheduler.brightness);
   #endif  
   #if defined(CHANNEL_THREE)
     ScheduleTask scheduleThreeTask;
@@ -240,7 +236,6 @@ Serial.println(F("set one schedule"));
     scheduleThreeTask.blinkLed = LED;
     scheduleThreeTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleThreeTask);
-    // automation.setupBrightness(channelThreeTaskScheduler.channelId, channelThreeTaskScheduler.brightness);
   #endif  
   #if defined(CHANNEL_FOUR)
     ScheduleTask scheduleFourTask;
@@ -250,7 +245,6 @@ Serial.println(F("set one schedule"));
     scheduleFourTask.blinkLed = LED;
     scheduleFourTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleFourTask);
-    // automation.setupBrightness(channelFourTaskScheduler.channelId, channelFourTaskScheduler.brightness);
   #endif
   /* #endregion */
 

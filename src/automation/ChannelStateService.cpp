@@ -17,7 +17,6 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
                                       int  endTimeMinute,
                                       bool    enabled,
                                       int brightness,
-                                      int channelId,
                                       String  channelName,
                                       bool enableTimeSpan,
                                       ChannelMqttSettingsService* channelMqttSettingsService,
@@ -60,10 +59,6 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
                 channelJsonConfigPath,
                 DEFAULT_JSON_DOCUMENT_SIZE)
                 {
-            
-  Serial.println(F("ChannelStateService::ChannelStateService"));
-  Serial.println("channelID: " + channelId);
-  Serial.println("brightness: " + brightness);
 
   _channelControlPin = channelControlPin;
   _homeAssistantIcon = homeAssistantIcon;
@@ -319,10 +314,6 @@ void ChannelStateService::begin() {
           _state.channel.schedule.weekDays[day] = day;
       }
     }
-
-
-    Serial.print(F("ChannelStateService::begin"));
-    Serial.println(_state.channel.channelId);
 
     _fsPersistence.readFromFS();
     _state.channel.controlOn = DEFAULT_CONTROL_STATE; // must be off on start up

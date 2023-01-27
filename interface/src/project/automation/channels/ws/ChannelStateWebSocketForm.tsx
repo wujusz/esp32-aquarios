@@ -21,19 +21,6 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({channelI
   const onClick = () => navigate(RemoteUtils.getNavigationLink('auto', data?.restChannelEndPoint));
   const switchType = 2; //led type switch
   
-  const handleBrightness = updateValue(updateData);
-  
-  
-  /*(event: any, newValue: number | number[]) => {
-    let slider = Array.isArray(newValue) ? 0 : newValue;
-    data.brightness = slider;
-    
-    updateValue(updateData);
-
-
-    // setData({ ...data, 'brightness': slider });
-  };*/
-
   const content = () => {
     if (!connected || !data) {
       return (<FormLoader message="Connecting to WebSocket…" />);
@@ -72,7 +59,7 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({channelI
         />
         </ListItem>
         
-        { data.homeAssistantTopicType == switchType && selectBrightness(data, handleBrightness) }
+        { data.homeAssistantTopicType === switchType && selectBrightness(data, updateFormValue) }
 
         {showLink && (
         // eslint-disable-next-line jsx-a11y/anchor-is-valid

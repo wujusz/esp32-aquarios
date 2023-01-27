@@ -2,7 +2,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { BlockFormControlLabel } from '../../../../../components';
 import { ChannelState } from '../../../redux/types/channel';
-import { SwitchType } from '../../tooltips/SwitchType';
+import { AnalogChannelType } from "../../tooltips/AnalogChannelType";
 
 export function selectAnalogChannel(data: ChannelState,
   handleChannelStateValueChange: (name: keyof ChannelState) => (event: any) => void) {
@@ -29,6 +29,6 @@ export function selectAnalogChannel(data: ChannelState,
       <MenuItem value={14}>14</MenuItem>
       <MenuItem value={15}>15</MenuItem>
              </Select>}
-    label={(<SwitchType />)}
+    label={(<AnalogChannelType />)}
           />);
 }
