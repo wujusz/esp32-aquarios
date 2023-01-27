@@ -56,6 +56,7 @@ export interface ChannelState {
   activeDateRange: Array<string>;
   buildVersion: string;
   channelId: string;
+  analogChannel: number;
 }
 
 export interface ChannelList {

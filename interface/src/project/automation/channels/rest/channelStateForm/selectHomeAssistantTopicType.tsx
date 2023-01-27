@@ -14,6 +14,8 @@ export function selectHomeAssistantTopicType(data: ChannelState,
              >
       <MenuItem value={0}>Light</MenuItem>
       <MenuItem value={1}>Switch</MenuItem>
+      <MenuItem value={2}>Led</MenuItem>
+      <MenuItem value={3}>Module</MenuItem>
              </Select>}
     label={(<SwitchType />)}
           />);

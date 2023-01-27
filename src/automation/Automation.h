@@ -18,6 +18,7 @@
    #define TOGGLE_READ_PIN 0 
   #else
    #define LED 2 
+   #define CHANNEL 0
   #endif
 #endif
 
@@ -40,6 +41,8 @@ struct ScheduleTask {
     int toggleReadPin;
     int blinkLed;
     int ledOn;
+    int brightness;
+    int channelId;
 }; 
 
 struct SystemRestart {
@@ -53,6 +56,8 @@ class Automation {
     Automation();
     void setSchedules(std::list<ScheduleTask>* scheduleTaskList);
     void ntpSearch();
+    void setupBrightness(uint32_t channelId, uint32_t controlPin);
+
 
     private:
     Ticker _blinkerHeartBeat;
@@ -63,7 +68,14 @@ class Automation {
 
     static void staticTickerCallbackChangeState(Automation *pThis);
     void changeState();
+
+    static void staticTickerCallbackSetupBrightness(Automation *pThis);
    
+    static void staticTickerCallbackChangeBrightness(Automation *pThis);
+    
+    void changeBrightness(uint8_t channelId, uint32_t value);
+    void changeBrightness(uint8_t channelId, uint32_t value, uint32_t valueMax);
+
     static void staticTickerCallbackTurnLedOn(Automation *pThis);
     void turnLedOn();
 

@@ -16,6 +16,8 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
                                       int  endTimeHour,
                                       int  endTimeMinute,
                                       bool    enabled,
+                                      int brightness,
+                                      int channelId,
                                       String  channelName,
                                       bool enableTimeSpan,
                                       ChannelMqttSettingsService* channelMqttSettingsService,
@@ -33,7 +35,8 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
                                       String  activeStartDateRange,
                                       String  activeEndDateRange,
                                       String buildVersion,
-                                      String weekDays) :
+                                      String weekDays,
+                                      int analogChannel) :
     _httpEndpoint(ChannelState::read,
                   ChannelState::update,
                   this,
@@ -57,6 +60,11 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
                 channelJsonConfigPath,
                 DEFAULT_JSON_DOCUMENT_SIZE)
                 {
+            
+  Serial.println(F("ChannelStateService::ChannelStateService"));
+  Serial.println("channelID: " + channelId);
+  Serial.println("brightness: " + brightness);
+
   _channelControlPin = channelControlPin;
   _homeAssistantIcon = homeAssistantIcon;
   _homeAssistantTopicType = homeAssistantTopicType;
@@ -68,6 +76,7 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
   _endTimeHour  = (int)(round(3600 * float(endTimeHour)));
   _endTimeMinute  = (int)(round(60 * float(endTimeMinute)));
   _enabled  = enabled;
+  _brightness = brightness;
   _channelName = channelName;
   _enableTimeSpan = enableTimeSpan;
   _randomize = randomize;
@@ -88,6 +97,7 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
   _activeEndDateRange = activeEndDateRange;
   _buildVersion = buildVersion;
   _weekDays = weekDays;
+  _analogChannel = analogChannel;
 
   // configure controls to be output
   pinMode(_channelControlPin, OUTPUT);
@@ -103,6 +113,11 @@ ChannelStateService::ChannelStateService(AsyncWebServer* server,
   // configure settings service update handler to update CONTROL state
   addUpdateHandler([&](const String& originId) { onConfigUpdated(); }, false);
 
+  // configure settings service update handler to update CONTROL state
+  /*addUpdateHandler([&](const String& originId) { 
+    // onChangeBrightness(); 
+    }, false);
+*/
   #ifdef ESP32
   WiFi.onEvent(
       std::bind(&ChannelStateService::onStationModeDisconnected, this, std::placeholders::_1, std::placeholders::_2),
@@ -135,6 +150,7 @@ void ChannelStateService::onStationModeDisconnected(const WiFiEventStationModeDi
 }
 
 #endif
+
 void ChannelStateService::onConfigUpdated() {
   digitalWrite(_state.channel.controlPin, _state.channel.controlOn ? CONTROL_ON : CONTROL_OFF);
 }
@@ -177,6 +193,9 @@ void ChannelStateService::registerPinConfig(uint8_t controlPin, uint8_t homeAssi
         doc["payload_on"] = utils.makeConfigPayload(true, _state.channel, controlPin);
         doc["payload_off"] = utils.makeConfigPayload(false, _state.channel, controlPin);
         break;
+      case HOMEASSISTANT_TOPIC_TYPE_LED:
+        doc["brightness"] = _state.channel.brightness;
+        break;
       default:
         doc["schema"] = "json";
         break;
@@ -192,7 +211,21 @@ void ChannelStateService::registerPinConfig(uint8_t controlPin, uint8_t homeAssi
 }
 
 void ChannelStateService::registerConfig() {
+  /*Serial.println(F("ChannelStateService::registerConfig"));
+  Serial.println(" - name: "+_state.channel.name);
+  Serial.println(" - controlPin: "+_state.channel.controlPin);
+  Serial.println(" - id: "+ _state.channel.channelId);*/
   registerPinConfig(_state.channel.controlPin, _state.channel.homeAssistantTopicType);
+}
+
+void ChannelStateService::onChangeBrightness() {
+  uint32_t valueMax = 255;
+  uint32_t brightness = (int)(_state.channel.brightness * 2.55);
+  // calculate duty, 4095 from 2 ^ 12 - 1
+  uint32_t duty = (4095 / valueMax) * min(brightness, valueMax);
+
+  // write duty to LEDC
+  // ledcWrite(_state.channel.channelId, duty);
 }
 
 void ChannelStateService::mqttUnregisterConfig(uint8_t controlPin, uint8_t homeAssistantTopicType) {
@@ -215,6 +248,7 @@ void ChannelStateService::mqttUnregisterConfig(uint8_t controlPin, uint8_t homeA
 }
 
 void updateStateTimeTicker(ChannelStateService* channelStateService){
+  Serial.println(F("updateStateTimeTicker"));
   channelStateService->updateStateTime();
 }
 
@@ -237,6 +271,7 @@ void ChannelStateService::begin() {
     _state.channel.homeAssistantIcon = _homeAssistantIcon;
     _state.channel.homeAssistantTopicType = _homeAssistantTopicType;
     _state.channel.enabled = _enabled;
+    _state.channel.brightness = _brightness;
     _state.channel.enableTimeSpan = _enableTimeSpan;
     _state.channel.randomize = _randomize;
     _state.channel.isHotScheduleActive = _isHotScheduleActive;
@@ -251,6 +286,7 @@ void ChannelStateService::begin() {
     _state.channel.activeOutsideDateRange = _activeOutsideDateRange;
     _state.channel.activeStartDateRange = _activeStartDateRange;
     _state.channel.activeEndDateRange = _activeEndDateRange;
+    _state.channel.analogChannel = _analogChannel;
 
     _state.channel.schedule.runEvery =  _runEvery;
     _state.channel.schedule.offAfter =  _offAfter;
@@ -283,6 +319,10 @@ void ChannelStateService::begin() {
           _state.channel.schedule.weekDays[day] = day;
       }
     }
+
+
+    Serial.print(F("ChannelStateService::begin"));
+    Serial.println(_state.channel.channelId);
 
     _fsPersistence.readFromFS();
     _state.channel.controlOn = DEFAULT_CONTROL_STATE; // must be off on start up

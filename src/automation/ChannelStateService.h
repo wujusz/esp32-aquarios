@@ -8,6 +8,12 @@
 #include <Ticker.h>
 #include "ChannelState.h"
 #include "ChannelMqttSettingsService.h"
+#include <stdio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "driver/ledc.h"
+#include "esp_err.h"
+#include "esp32-hal-ledc.h"
 
 class ChannelStateService : public StatefulService<ChannelState> {
  public:
@@ -26,6 +32,8 @@ class ChannelStateService : public StatefulService<ChannelState> {
                     int  endTimeHour,      // 16
                     int  endTimeMinute,    // 30
                     bool    enabled,
+                    int brightness,
+                    int channelId,
                     String  channelName,
                     bool  enableTimeSpan,
                     ChannelMqttSettingsService* channelMqttSettingsService,
@@ -43,7 +51,8 @@ class ChannelStateService : public StatefulService<ChannelState> {
                     String  activeStartDateRange,
                     String  activeEndDateRange,
                     String buildVersion,
-                    String weekDays);
+                    String weekDays,
+                    int analogChannel);
 
   void begin();
   Channel getChannel();
@@ -74,6 +83,7 @@ class ChannelStateService : public StatefulService<ChannelState> {
   int  _hotTimeHour;      // 0 to 16hr
   int  _overrideTime;     //
   bool    _enabled;
+  int _brightness;
   String  _channelName;
   bool  _enableTimeSpan;
   bool  _randomize;
@@ -94,6 +104,7 @@ class ChannelStateService : public StatefulService<ChannelState> {
   String _activeEndDateRange;
   String _buildVersion;
   String _weekDays;
+  int _analogChannel;
 
 #ifdef ESP32
   void onStationModeGotIP(WiFiEvent_t event, WiFiEventInfo_t info);
@@ -110,5 +121,6 @@ class ChannelStateService : public StatefulService<ChannelState> {
   void registerPinConfig(uint8_t controlPin, uint8_t homeAssistantTopicType);
   void onConfigUpdated();
   void updateStateIP(String IPAddress);
+  void onChangeBrightness();
 };
 #endif

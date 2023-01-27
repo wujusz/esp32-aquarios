@@ -5,7 +5,7 @@
 #include <HttpEndpoint.h>
 #include <SettingValue.h>
 #include "Homeassistant.h"
-#include "Channels.h"
+#include "channels.h"
 
 #define DEBUG 0
 
@@ -69,9 +69,12 @@ struct Channel {
     uint8_t controlPin;
     uint8_t homeAssistantTopicType;
     String  homeAssistantIcon;
+    uint8_t channelId;
     int startTime;
     int endTime;
     bool  enabled;
+    uint8_t brightness;
+    uint8_t analogChannel;
     String  name;            // control name e.g, Pump
     Schedule  schedule;
     bool  enableTimeSpan;  // when enable control is on between startTime and endTime
@@ -280,6 +283,14 @@ public:
         case HOMEASSISTANT_TOPIC_TYPE_LIGHT:
           topicHeader = "homeassistant/light/";
           topicType = "light";
+        break;
+        case HOMEASSISTANT_TOPIC_TYPE_LED:
+          topicHeader = "homeassistant/led/";
+          topicType = "led";
+        break;
+        case HOMEASSISTANT_TOPIC_TYPE_MODE:
+          topicHeader = "homeassistant/module/";
+          topicType = "module";
         break;
         default:
         break;

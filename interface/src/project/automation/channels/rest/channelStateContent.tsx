@@ -34,6 +34,8 @@ import { selectMarks } from "./channelStateForm/selectMarks";
 import { setHotTimeHour } from "./channelStateForm/setHotTimeHour";
 import { setStartTimeHour } from "./channelStateForm/setStartTimeHour";
 import { selectWeekDays } from "./channelStateForm/selectWeekDays";
+import { selectBrightness } from "./channelStateForm/selectBrightness";
+import { selectAnalogChannel } from "./channelStateForm/selectAnalogChannel";
 
 export function channelStateContent(data: ChannelState | undefined,
   loadData: () => Promise<void>, errorMessage: string | undefined,
@@ -86,6 +88,11 @@ export function channelStateContent(data: ChannelState | undefined,
       setData({ ...data, schedule: { ...data.schedule, hotTimeHour: slider } });
     };
 
+    const handleBrightness = (event: any, newValue: number | number[]) => {
+      let slider = Array.isArray(newValue) ? 0 : newValue;
+      setData({ ...data, 'brightness': slider });
+    };
+
     const handleChannelScheduleValueChange = scheduleValueChanged(extractDateValue, setData, data);
 
     const handleDateRange = (dateRange: string) => {
@@ -134,6 +141,12 @@ export function channelStateContent(data: ChannelState | undefined,
           onChange={updateFormValue}
           margin="normal"
         />
+
+
+        {selectHomeAssistantTopicType(data, handleChannelStateValueChange)}
+        {selectControlPin(data, handleChannelStateValueChange)}
+        {selectHomeAssistantIcon(data, handleChannelStateValueChange)}
+       
         <BlockFormControlLabel
           control={<Checkbox
             checked={data.enabled}
@@ -143,50 +156,54 @@ export function channelStateContent(data: ChannelState | undefined,
                    />}
           label={(<ScheduleEnabled buildVersion={data.buildVersion} />)}
         />
-        {data.enabled && selectWeekDays(data, handleChannelSelectWeekDaysValueChange)}
+        
+        { data.enabled && data.homeAssistantTopicType == 2 && selectBrightness(data, handleBrightness) }
+        { data.enabled && selectWeekDays(data, handleChannelSelectWeekDaysValueChange) }
+        
+        { data.enabled && selectAnalogChannel(data, handleChannelStateValueChange)}
 
-        <BlockFormControlLabel
-          control={<Checkbox
-            checked={data.enableDateRange}
-            style={{ height: 45 }}
-            onChange={handleChannelStateValueChange('enableDateRange')}
-            color="primary"
-                   />}
-          label={(<DateRangeEnabled />)}
-        />
-        {data.enableDateRange && (
-          <div>
-            <BlockFormControlLabel
-              control={<Checkbox
-                checked={data.activeOutsideDateRange}
-                style={{ height: 45 }}
-                onChange={handleChannelStateValueChange('activeOutsideDateRange')}
-                color="primary"
-                       />}
-              label={(<ActiveOutsideDateRange />)}
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DateRangePicker
-                size="lg"
-                appearance="default"
-                style={styles}
-                value={activeDateRange}
-                onChange={(newValue) => {
-                  if (newValue) {
-                    handleDateRange(JSON.stringify(newValue));
-                    const dateRange = JSON.parse(JSON.stringify(newValue));
-                    setDateRange([new Date(dateRange[0]), new Date(dateRange[1])]);
-                  }
-                }}
-                disabledDate={allowedMaxDays?.(365)}
-              />
-            </LocalizationProvider>
-          </div>
-        )}
-        {selectControlPin(data, handleChannelStateValueChange)}
 
         {data.enabled && (
           <div>
+            <BlockFormControlLabel
+              control={<Checkbox
+                checked={data.enableDateRange}
+                style={{ height: 45 }}
+                onChange={handleChannelStateValueChange('enableDateRange')}
+                color="primary"
+                      />}
+              label={(<DateRangeEnabled />)}
+            />
+            {data.enableDateRange && (
+              <div>
+                <BlockFormControlLabel
+                  control={<Checkbox
+                    checked={data.activeOutsideDateRange}
+                    style={{ height: 45 }}
+                    onChange={handleChannelStateValueChange('activeOutsideDateRange')}
+                    color="primary"
+                          />}
+                  label={(<ActiveOutsideDateRange />)}
+                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DateRangePicker
+                    size="lg"
+                    appearance="default"
+                    style={styles}
+                    value={activeDateRange}
+                    onChange={(newValue) => {
+                      if (newValue) {
+                        handleDateRange(JSON.stringify(newValue));
+                        const dateRange = JSON.parse(JSON.stringify(newValue));
+                        setDateRange([new Date(dateRange[0]), new Date(dateRange[1])]);
+                      }
+                    }}
+                    disabledDate={allowedMaxDays?.(365)}
+                  />
+                </LocalizationProvider>
+              </div>
+            )}
+
             <BlockFormControlLabel
               control={<Checkbox
                 checked={data.enableTimeSpan}
@@ -215,8 +232,7 @@ export function channelStateContent(data: ChannelState | undefined,
                 label={(<MinimumRunTime />)}
               />)}
             {selectOverrideTime(data, handleChannelScheduleValueChange)}
-            {selectHomeAssistantIcon(data, handleChannelStateValueChange)}
-            {selectHomeAssistantTopicType(data, handleChannelStateValueChange)}
+            
             {!data.enableTimeSpan && (
               <div>
                 {selectRunEvery(data, handleChannelScheduleValueChange)}
@@ -240,6 +256,7 @@ export function channelStateContent(data: ChannelState | undefined,
             </LocalizationProvider>
           </div>
         )}
+
         <BlockFormControlLabel
           control={<Checkbox
             checked={data.enableRemoteConfiguration}
@@ -268,6 +285,3 @@ export function channelStateContent(data: ChannelState | undefined,
     );
   };
 }
-
-
-

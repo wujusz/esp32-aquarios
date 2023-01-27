@@ -6,6 +6,9 @@
 
 #define DEFAULT_LED_STATE false
 #define DEFAULT_CONTROL_STATE false
+#define DEFAULT_BRIGHTNESS_STATE 100
+#define DEFAULT_BRIGHTNESS_FREQ 500
+#define DEFAULT_BRIGHTNESS_BIT 8
 
 #define DEFAULT_JSON_DOCUMENT_SIZE 2048
 
@@ -31,9 +34,15 @@ public:
   
   static StateUpdateResult wsUpdate(JsonObject& root, ChannelState& settings) {
     boolean newState = root["controlOn"] | DEFAULT_CONTROL_STATE;
+    boolean newBrightness = root["brightness"] | DEFAULT_BRIGHTNESS_STATE;
+
     if (settings.channel.controlOn != newState) {
       settings.channel.controlOn = newState;
       settings.channel.schedule.isOverride = true;
+      return StateUpdateResult::CHANGED;
+    }
+    if(settings.channel.brightness != newBrightness){
+      settings.channel.brightness = newBrightness;
       return StateUpdateResult::CHANGED;
     }
     return StateUpdateResult::UNCHANGED;
@@ -120,7 +129,9 @@ static void haRead(ChannelState& settings, JsonObject& root) {
     jsonObject["homeAssistantIcon"] = channel.homeAssistantIcon;
     jsonObject["controlOn"] = channel.controlOn;
     jsonObject["name"] = channel.name;
+    jsonObject["channelId"] = channel.channelId;
     jsonObject["enabled"] = channel.enabled;
+    jsonObject["brightness"] = channel.brightness;
     jsonObject["enableTimeSpan"] = channel.enableTimeSpan;
     jsonObject["lastStartedChangeTime"] = channel.lastStartedChangeTime;
     jsonObject["nextRunTime"] = channel.nextRunTime;
@@ -135,6 +146,7 @@ static void haRead(ChannelState& settings, JsonObject& root) {
     jsonObject["enableDateRange"] = channel.enableDateRange;
     jsonObject["activeOutsideDateRange"] = channel.activeOutsideDateRange;
     jsonObject["buildVersion"] = channel.buildVersion;
+    jsonObject["analogChannel"] = channel.analogChannel;
 
 
     JsonArray activeDateRange = jsonObject.createNestedArray("activeDateRange");
@@ -197,7 +209,9 @@ static void updateChannel(JsonObject& json, Channel& channel) {
     channel.homeAssistantIcon = json["homeAssistantIcon"] | channel.homeAssistantIcon;
     channel.controlOn = json["controlOn"] | DEFAULT_CONTROL_STATE;
     channel.name = json["name"] | channel.name;
+    channel.channelId = json["channelId"] | channel.channelId;
     channel.enabled = json["enabled"] | channel.enabled;
+    channel.brightness = json["brightness"] | channel.brightness;
     channel.enableTimeSpan = json["enableTimeSpan"] | channel.enableTimeSpan;
     channel.lastStartedChangeTime = json["lastStartedChangeTime"] | utils.strLocalTime();
     channel.nextRunTime = json["nextRunTime"] | "";
@@ -208,6 +222,7 @@ static void updateChannel(JsonObject& json, Channel& channel) {
     channel.masterIPAddress = json["masterIPAddress"] | channel.masterIPAddress;
     channel.enableDateRange = json["enableDateRange"] | channel.enableDateRange;
     channel.activeOutsideDateRange = json["activeOutsideDateRange"] | channel.activeOutsideDateRange;
+    channel.analogChannel = json["analogChannel"] | channel.analogChannel;
     
 
     JsonArray activeDateRange = json["activeDateRange"];

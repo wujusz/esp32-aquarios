@@ -9,6 +9,7 @@ import { updateValue, useWs } from '../../../../utils';
 import { ChannelState} from '../../redux/types/channel';
 import { RemoteUtils } from '../../utils/remoteUtils';
 import { ChannelStateWebSocketFormProps } from './ws';
+import { selectBrightness } from '../rest/channelStateForm/selectBrightness';
 
 const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({channelId}) => {
   const websocketEndPoint = `channel${channelId}State`;
@@ -18,6 +19,20 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({channelI
   const showLink = pathname.includes('/status');
   const navigate  = useNavigate ();
   const onClick = () => navigate(RemoteUtils.getNavigationLink('auto', data?.restChannelEndPoint));
+  const switchType = 2; //led type switch
+  
+  const handleBrightness = updateValue(updateData);
+  
+  
+  /*(event: any, newValue: number | number[]) => {
+    let slider = Array.isArray(newValue) ? 0 : newValue;
+    data.brightness = slider;
+    
+    updateValue(updateData);
+
+
+    // setData({ ...data, 'brightness': slider });
+  };*/
 
   const content = () => {
     if (!connected || !data) {
@@ -50,11 +65,15 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({channelI
             }
             label="Switch Status"
         />
+
         <ListItemText
           primary={`Scheduled ${data.nextRunTime.substr(0, data.nextRunTime.lastIndexOf(' '))}`}
           secondary={`Last status at ${data.lastStartedChangeTime.substr(0, data.lastStartedChangeTime.lastIndexOf(' '))}`}
         />
         </ListItem>
+        
+        { data.homeAssistantTopicType == switchType && selectBrightness(data, handleBrightness) }
+
         {showLink && (
         // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <Typography variant="body1"><a onClick={onClick} href="#">Schedule</a></Typography>)}

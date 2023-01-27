@@ -19,6 +19,7 @@ uint8_t homeAssistantTopicType, String homeAssistantIcon) :
 }
 
 void ChannelMqttSettingsService::begin() {
+  debugln(F("ChannelMqttSettingsService::begin"));
    _state.channelControlPin = _channelControlPin;
    _state.channelName = _channelName;
    _state.homeAssistantEntity = _homeAssistantEntity;

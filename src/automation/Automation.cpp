@@ -32,7 +32,36 @@ void Automation::restartSystemNow() {
   }
 
 void Automation::ntpSearch(){
+  Serial.println(F("START stpSearch"));
     _blinkerHeartBeat.attach(0.125, &Automation::staticTickerCallbackChangeState, this);
+}
+
+void Automation::staticTickerCallbackChangeBrightness(Automation *pThis)
+{
+  Serial.println(F("Automation::staticTickerCallbackChangeBrightness"));
+  pThis->changeBrightness(CHANNEL, LED);
+}
+
+void Automation::setupBrightness(uint32_t channelId, uint32_t controlPin)
+{
+  Serial.println(F("Automation::setupBrightness"));
+  Serial.print("setupBrightness: ch: ");
+  Serial.print(channelId);
+  Serial.print(" PIN: ");
+  Serial.println(controlPin);
+    // Setup timer and attach timer to a led pin
+  // ledcSetup(controlPin, DEFAULT_BRIGHTNESS_FREQ, DEFAULT_BRIGHTNESS_BIT);
+  // ledcAttachPin(controlPin, channelId);
+}
+
+void Automation::changeBrightness(uint8_t channelId, uint32_t value, uint32_t valueMax = 255) {
+  uint32_t brightness = (int)(value * 2.55);
+  // calculate duty, 4095 from 2 ^ 12 - 1
+  uint32_t duty = (4095 / valueMax) * min(brightness, valueMax);
+
+  Serial.println(F("Automation::changeBrightness"));
+  // write duty to LEDC
+  // ledcWrite(channelId, duty);
 }
 
 void Automation::staticTickerCallbackChangeState(Automation *pThis)
@@ -51,6 +80,7 @@ void Automation::staticTickerCallbackTurnLedOff(Automation *pThis)
 }
 
 void Automation::turnLedOff(){
+  Serial.println(F("Automation::turnLedOff"));
   digitalWrite(LED, LED_OFF);
 }
 
@@ -60,6 +90,7 @@ void Automation::staticTickerCallbackTurnLedOn(Automation *pThis)
 }
 
 void Automation::turnLedOn(){
+  Serial.println(F("AUtomation::TURNLEDON"));
   digitalWrite(LED, LED_ON);
   _blinkerHeartBeatOff.once(0.125, &Automation::staticTickerCallbackTurnLedOff, this);
 }
@@ -76,6 +107,7 @@ void Automation::setSchedules(std::list<ScheduleTask>* scheduleTaskList){
           _blinkerHeartBeat.attach(2.0, &Automation::staticTickerCallbackTurnLedOn, this);    
           for(std::list<ScheduleTask>::iterator i = scheduleTaskList->begin(); i != scheduleTaskList->end();)
             {
+              Serial.println(F("setSchedules ChannelId: " + i->channelId));
               i->channelTaskScheduler->setSchedule();
               i->channelTaskScheduler->setToggleSwitch(
                 i->bToggleSwitch,

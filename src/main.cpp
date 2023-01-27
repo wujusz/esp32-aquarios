@@ -1,6 +1,7 @@
 #include <ESP8266React.h>
 #include "./automation/Automation.h"
 #include "./automation/Schedules.h"
+#include "./automation/channels.h"
 
 #define SERIAL_BAUD_RATE 115200
 
@@ -30,6 +31,7 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_ONE_DEFAULT_CONTROL_END_TIME_HOUR,
                                                         CHANNEL_ONE_DEFAULT_CONTROL_END_TIME_MINUTE,
                                                         CHANNEL_ONE_DEFAULT_ENABLED_STATE,
+                                                        CHANNEL_ONE_BRIGHTNESS,
                                                         CHANNEL_ONE_DEFAULT_NAME,
                                                         CHANNEL_ONE_DEFAULT_ENABLE_TIME_SPAN_SCHEDULE,
                                                         &channelOneMqttSettingsService,
@@ -47,7 +49,8 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_ONE_ACTIVE_START_DATE_RANGE,
                                                         CHANNEL_ONE_ACTIVE_END_DATE_RANGE,
                                                         BUILD_VERSION,
-                                                        CHANNEL_ONE_ACTIVE_WEEK_DAYS);
+                                                        CHANNEL_ONE_ACTIVE_WEEK_DAYS,
+                                                        CHANNEL_ONE_DEFAULT_ID);
   ChannelScheduleRestartService channelOneScheduleRestartService = ChannelScheduleRestartService(&server, esp8266React.getSecurityManager(), &channelOneTaskScheduler, CHANNEL_ONE_SCHEDULE_RESTART_SERVICE_PATH);
 #endif
 #if defined(CHANNEL_TWO)
@@ -72,6 +75,7 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_TWO_DEFAULT_CONTROL_END_TIME_HOUR,
                                                         CHANNEL_TWO_DEFAULT_CONTROL_END_TIME_MINUTE,
                                                         CHANNEL_TWO_DEFAULT_ENABLED_STATE,
+                                                        CHANNEL_TWO_BRIGHTNESS,
                                                         CHANNEL_TWO_DEFAULT_NAME,
                                                         CHANNEL_TWO_DEFAULT_ENABLE_TIME_SPAN_SCHEDULE,
                                                         &channelTwoMqttSettingsService,
@@ -89,7 +93,8 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_TWO_ACTIVE_START_DATE_RANGE,
                                                         CHANNEL_TWO_ACTIVE_END_DATE_RANGE,
                                                         BUILD_VERSION,
-                                                        CHANNEL_TWO_ACTIVE_WEEK_DAYS);  
+                                                        CHANNEL_TWO_ACTIVE_WEEK_DAYS,
+                                                        CHANNEL_TWO_DEFAULT_ID);  
   ChannelScheduleRestartService channelTwoScheduleRestartService = ChannelScheduleRestartService(&server, esp8266React.getSecurityManager(), &channelTwoTaskScheduler, CHANNEL_TWO_SCHEDULE_RESTART_SERVICE_PATH);
 #endif
 #if defined(CHANNEL_THREE)
@@ -114,6 +119,7 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_THREE_DEFAULT_CONTROL_END_TIME_HOUR,
                                                         CHANNEL_THREE_DEFAULT_CONTROL_END_TIME_MINUTE,
                                                         CHANNEL_THREE_DEFAULT_ENABLED_STATE,
+                                                        CHANNEL_THREE_BRIGHTNESS,
                                                         CHANNEL_THREE_DEFAULT_NAME,
                                                         CHANNEL_THREE_DEFAULT_ENABLE_TIME_SPAN_SCHEDULE,
                                                         &channelThreeMqttSettingsService,
@@ -131,7 +137,8 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_THREE_ACTIVE_START_DATE_RANGE,
                                                         CHANNEL_THREE_ACTIVE_END_DATE_RANGE,
                                                         BUILD_VERSION,
-                                                        CHANNEL_THREE_ACTIVE_WEEK_DAYS);
+                                                        CHANNEL_THREE_ACTIVE_WEEK_DAYS,
+                                                        CHANNEL_THREE_DEFAULT_ID);
   ChannelScheduleRestartService channelThreeScheduleRestartService = ChannelScheduleRestartService(&server, esp8266React.getSecurityManager(), &channelThreeTaskScheduler, CHANNEL_THREE_SCHEDULE_RESTART_SERVICE_PATH);
 #endif  
 #if defined(CHANNEL_FOUR)
@@ -156,6 +163,7 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_FOUR_DEFAULT_CONTROL_END_TIME_HOUR,
                                                         CHANNEL_FOUR_DEFAULT_CONTROL_END_TIME_MINUTE,
                                                         CHANNEL_FOUR_DEFAULT_ENABLED_STATE,
+                                                        CHANNEL_FOUR_BRIGHTNESS,
                                                         CHANNEL_FOUR_DEFAULT_NAME,
                                                         CHANNEL_FOUR_DEFAULT_ENABLE_TIME_SPAN_SCHEDULE,
                                                         &channelFourMqttSettingsService,
@@ -173,7 +181,8 @@ ESP8266React esp8266React(&server);
                                                         CHANNEL_FOUR_ACTIVE_START_DATE_RANGE,
                                                         CHANNEL_FOUR_ACTIVE_END_DATE_RANGE,
                                                         BUILD_VERSION,
-                                                        CHANNEL_FOUR_ACTIVE_WEEK_DAYS);
+                                                        CHANNEL_FOUR_ACTIVE_WEEK_DAYS,
+                                                        CHANNEL_FOUR_DEFAULT_ID);
   ChannelScheduleRestartService channelFourScheduleRestartService = ChannelScheduleRestartService(&server, esp8266React.getSecurityManager(), &channelFourTaskScheduler, CHANNEL_FOUR_SCHEDULE_RESTART_SERVICE_PATH);
 #endif
 /* #endregion */
@@ -191,6 +200,7 @@ Automation automation = Automation();
 Schedules schedules = Schedules(&automation);
 
 void setup() {
+  Serial.println(F("SETUP FUNCTION"));
   // start serial and filesystem
   Serial.begin(SERIAL_BAUD_RATE);
 
@@ -198,6 +208,7 @@ void setup() {
   // start the framework and demo project
   esp8266React.begin();
 
+Serial.println(F("set one schedule"));
   /* #region Begin Schedules */
   #if defined(CHANNEL_ONE)
     ScheduleTask scheduleOneTask;
@@ -207,7 +218,10 @@ void setup() {
     scheduleOneTask.blinkLed = LED;
     scheduleOneTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleOneTask);
+
+    //automation.setupBrightness(CHANNEL_ONE_DEFAULT_ID, CHANNEL_ONE_CONTROL_PIN);
   #endif  
+
   #if defined(CHANNEL_TWO)
     ScheduleTask scheduleTwoTask;
     scheduleTwoTask.channelTaskScheduler = &channelTwoTaskScheduler;
@@ -216,6 +230,7 @@ void setup() {
     scheduleTwoTask.blinkLed = LED;
     scheduleTwoTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleTwoTask);
+    // automation.setupBrightness(channelTwoTaskScheduler.channelId, channelTwoTaskScheduler.brightness);
   #endif  
   #if defined(CHANNEL_THREE)
     ScheduleTask scheduleThreeTask;
@@ -225,6 +240,7 @@ void setup() {
     scheduleThreeTask.blinkLed = LED;
     scheduleThreeTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleThreeTask);
+    // automation.setupBrightness(channelThreeTaskScheduler.channelId, channelThreeTaskScheduler.brightness);
   #endif  
   #if defined(CHANNEL_FOUR)
     ScheduleTask scheduleFourTask;
@@ -234,6 +250,7 @@ void setup() {
     scheduleFourTask.blinkLed = LED;
     scheduleFourTask.ledOn = LED_ON;
     schedules.addSchedule(scheduleFourTask);
+    // automation.setupBrightness(channelFourTaskScheduler.channelId, channelFourTaskScheduler.brightness);
   #endif
   /* #endregion */
 
