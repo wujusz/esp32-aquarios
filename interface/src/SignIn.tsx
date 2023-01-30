@@ -13,7 +13,6 @@ import { SIGN_IN_REQUEST_VALIDATOR, validate } from './validators';
 import { extractErrorMessage, onEnterCallback, updateValue } from './utils';
 import { AuthenticationContext } from './contexts/authentication';
 
-
 import { RemoteUtils } from './project/automation/utils/remoteUtils';
 
 const SignIn: FC = () => {

@@ -21,7 +21,7 @@ import { useParams } from 'react-router-dom';
 const ChannelDetails: FC = () => {
   useLayoutTitle("Channel details");
 
-  const { id } = useParams();  
+  const {id} = useParams();  
   const [value, setValue] = React.useState('1');
   const channelId = id ? id : "One";
 

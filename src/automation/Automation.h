@@ -55,7 +55,6 @@ class Automation {
     Automation();
     void setSchedules(std::list<ScheduleTask>* scheduleTaskList);
     void ntpSearch();
-    void setupBrightness(uint32_t channelId, uint32_t controlPin);
 
 
     private:
@@ -72,14 +71,11 @@ class Automation {
    
     static void staticTickerCallbackChangeBrightness(Automation *pThis);
     
-    void changeBrightness(uint8_t channelId, uint32_t value);
-    void changeBrightness(uint8_t channelId, uint32_t value, uint32_t valueMax);
+    static void staticTickerCallbackTurnOn(Automation *pThis);
+    void turnOn();
 
-    static void staticTickerCallbackTurnLedOn(Automation *pThis);
-    void turnLedOn();
-
-    static void staticTickerCallbackTurnLedOff(Automation *pThis);
-    void turnLedOff();
+    static void staticTickerCallbackTurnOff(Automation *pThis);
+    void turnOff();
 
     static void staticTickerCallbackRestartSystemNow(Automation *pThis);
     void restartSystemNow();

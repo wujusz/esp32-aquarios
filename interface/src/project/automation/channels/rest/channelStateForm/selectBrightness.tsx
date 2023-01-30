@@ -4,9 +4,8 @@ import { ChannelState } from '../../../redux/types/channel';
 
 function selectBrightnessMarks() {
   let markList = [];
-  let numbers = [0,10,20,30,40,50,60,70,80,90,100];
-  for(let number of numbers)
-  {
+  let numbers = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  for (let number of numbers) {
     markList.push({
       value: number,
       label: `${number}%`
@@ -15,13 +14,12 @@ function selectBrightnessMarks() {
 
   return markList;
 }
-
-export function selectBrightness(data: ChannelState, 
-handleBrightnessChange: (event: any, newValue: number | number[]) => void) {
+export function selectBrightness(data: ChannelState,
+  handleBrightnessChange: (event: any, newValue: number | number[]) => void) {
   let marks = selectBrightnessMarks();
   return (<div>
     <Typography id="discrete-slider" gutterBottom>
-      {data.brightness}%
+      Brightness: {data.brightness}%
     </Typography>
     <Slider
       name="brightness"
@@ -35,5 +33,5 @@ handleBrightnessChange: (event: any, newValue: number | number[]) => void) {
       max={100}
       onChange={handleBrightnessChange}
     />
-          </div>);
+  </div>)
 }

@@ -35,11 +35,10 @@ import { setHotTimeHour } from "./channelStateForm/setHotTimeHour";
 import { setStartTimeHour } from "./channelStateForm/setStartTimeHour";
 import { selectWeekDays } from "./channelStateForm/selectWeekDays";
 import { selectBrightness } from "./channelStateForm/selectBrightness";
-import { selectAnalogChannel } from "./channelStateForm/selectAnalogChannel";
 
 export function channelStateContent(data: ChannelState | undefined,
   loadData: () => Promise<void>, errorMessage: string | undefined,
-  setData:Dispatch<React.SetStateAction<ChannelState | undefined>>,
+  setData: Dispatch<React.SetStateAction<ChannelState | undefined>>,
   onSetChannelSettings: (settings: ChannelSettings) => void,
   oldControlPin: number, oldHomeAssistantTopicType: number,
   setFieldErrors: Dispatch<React.SetStateAction<ValidateFieldsError | undefined>>,
@@ -47,7 +46,7 @@ export function channelStateContent(data: ChannelState | undefined,
   fieldErrors: ValidateFieldsError | undefined,
   updateFormValue: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
   activeDateRange: DateRange, setDateRange: Dispatch<SetStateAction<DateRange>>,
-  allowedMaxDays:  ((days: number) => DisabledDateFunction) | undefined,
+  allowedMaxDays: ((days: number) => DisabledDateFunction) | undefined,
   saving: boolean) {
 
   return () => {
@@ -141,26 +140,24 @@ export function channelStateContent(data: ChannelState | undefined,
           onChange={updateFormValue}
           margin="normal"
         />
-
+        {selectControlPin(data, handleChannelStateValueChange)}
 
         {selectHomeAssistantTopicType(data, handleChannelStateValueChange)}
-        {selectControlPin(data, handleChannelStateValueChange)}
         {selectHomeAssistantIcon(data, handleChannelStateValueChange)}
-       
+        
+        {data.homeAssistantTopicType === 2 && selectBrightness(data, handleBrightness)}
+
         <BlockFormControlLabel
           control={<Checkbox
             checked={data.enabled}
             style={{ height: 45 }}
             onChange={handleChannelStateValueChange('enabled')}
             color="primary"
-                   />}
+          />}
           label={(<ScheduleEnabled buildVersion={data.buildVersion} />)}
         />
-        {/* { data.homeAssistantTopicType == 2 && selectAnalogChannel(data, handleChannelStateValueChange)} */}
-        { data.homeAssistantTopicType == 2 && selectBrightness(data, handleBrightness) }
 
-        { data.enabled && selectWeekDays(data, handleChannelSelectWeekDaysValueChange) }
-
+        {data.enabled && selectWeekDays(data, handleChannelSelectWeekDaysValueChange)}
         {data.enabled && (
           <div>
             <BlockFormControlLabel
@@ -169,7 +166,7 @@ export function channelStateContent(data: ChannelState | undefined,
                 style={{ height: 45 }}
                 onChange={handleChannelStateValueChange('enableDateRange')}
                 color="primary"
-                      />}
+              />}
               label={(<DateRangeEnabled />)}
             />
             {data.enableDateRange && (
@@ -180,7 +177,7 @@ export function channelStateContent(data: ChannelState | undefined,
                     style={{ height: 45 }}
                     onChange={handleChannelStateValueChange('activeOutsideDateRange')}
                     color="primary"
-                          />}
+                  />}
                   label={(<ActiveOutsideDateRange />)}
                 />
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -207,7 +204,7 @@ export function channelStateContent(data: ChannelState | undefined,
                 checked={data.enableTimeSpan}
                 onChange={handleChannelStateValueChange('enableTimeSpan')}
                 color="primary"
-                       />}
+              />}
               label={(<TimeSpanEnabled />)}
             />
             <BlockFormControlLabel
@@ -216,7 +213,7 @@ export function channelStateContent(data: ChannelState | undefined,
                 disabled={data.enableTimeSpan}
                 onChange={handleChannelStateValueChange('randomize')}
                 color="primary"
-                       />}
+              />}
               label={(<RandomizeSwitch />)}
             />
 
@@ -226,11 +223,11 @@ export function channelStateContent(data: ChannelState | undefined,
                   checked={data.enableMinimumRunTime}
                   onChange={handleChannelStateValueChange('enableMinimumRunTime')}
                   color="primary"
-                         />}
+                />}
                 label={(<MinimumRunTime />)}
               />)}
             {selectOverrideTime(data, handleChannelScheduleValueChange)}
-            
+
             {!data.enableTimeSpan && (
               <div>
                 {selectRunEvery(data, handleChannelScheduleValueChange)}
@@ -260,7 +257,7 @@ export function channelStateContent(data: ChannelState | undefined,
             checked={data.enableRemoteConfiguration}
             onChange={handleChannelStateValueChange('enableRemoteConfiguration')}
             color="primary"
-                   />}
+          />}
           label={(<RemoteConfigEnabled />)}
         />
         {data.enableRemoteConfiguration &&

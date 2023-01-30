@@ -16,17 +16,17 @@ import * as ChannelApi from '../api/channelApi';
 import { RemoteUtils } from '../utils/remoteUtils';
 
 const ChannelListForm: FC = () => {
-  const [ list, setList ] = useState<any[]>([]);
-  const navigate = useNavigate();  
+  const [list, setList] = useState<any[]>([]);
+  const navigate = useNavigate();
   const channelUrl = (path: string) => navigate(RemoteUtils.getNavigationLink('auto', path));
 
   const getChannelData = async (channelId: string) => {
     try {
       const response = await ChannelApi.createReadChannelApi(channelId);
-        return response.data;
-      } catch (error) {
-        console.error(error);
-      }
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -48,8 +48,8 @@ const ChannelListForm: FC = () => {
 
     return (
       <>
-          <Table size="small">
-            <TableHead>
+        <Table size="small">
+          <TableHead>
             <TableRow>
               <TableCell>Channel name</TableCell>
               <TableCell align="center">Status</TableCell>
@@ -58,39 +58,39 @@ const ChannelListForm: FC = () => {
               <TableCell align="center">Type</TableCell>
               <TableCell></TableCell>
             </TableRow>
-            </TableHead>
-            <TableBody>
-              {list.map((channel) => (
-                <TableRow key={channel.uniqueId}>
-                  <TableCell component="th" scope="row">
-                    <a onClick={() => channelUrl(channel.restChannelEndPoint)}>{channel.name}</a>
-                  </TableCell>
-                  <TableCell align="center">
-                    {
-                      channel.controlOn ? <CheckIcon /> : <CloseIcon />
-                    }
-                  </TableCell>
-                  <TableCell align="center">
-                    {
-                      channel.enabled ? <CheckIcon /> : <CloseIcon />
-                    }
-                  </TableCell>
-                  <TableCell align='center'>{channel.controlPin}</TableCell>
-                  <TableCell align='center'>{channel.homeAssistantTopicType}</TableCell>
-                  <TableCell align="center">
-                    <IconButton size="small" aria-label="Show" onClick={() => showChannel}>
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}  
-            </TableBody>
-            <TableFooter >
-              <TableRow>
-
+          </TableHead>
+          <TableBody>
+            {list.map((channel) => (
+              <TableRow key={channel.uniqueId}>
+                <TableCell component="th" scope="row">
+                  <a onClick={() => channelUrl(channel.restChannelEndPoint)}>{channel.name}</a>
+                </TableCell>
+                <TableCell align="center">
+                  {
+                    channel.controlOn ? <CheckIcon /> : <CloseIcon />
+                  }
+                </TableCell>
+                <TableCell align="center">
+                  {
+                    channel.enabled ? <CheckIcon /> : <CloseIcon />
+                  }
+                </TableCell>
+                <TableCell align='center'>{channel.controlPin}</TableCell>
+                <TableCell align='center'>{channel.homeAssistantTopicType}</TableCell>
+                <TableCell align="center">
+                  <IconButton size="small" aria-label="Show" onClick={() => showChannel}>
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
-            </TableFooter>
-          </Table>
+            ))}
+          </TableBody>
+          <TableFooter >
+            <TableRow>
+
+            </TableRow>
+          </TableFooter>
+        </Table>
       </>
     );
   }

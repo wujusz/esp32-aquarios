@@ -32,36 +32,7 @@ void Automation::restartSystemNow() {
   }
 
 void Automation::ntpSearch(){
-  Serial.println(F("START stpSearch"));
     _blinkerHeartBeat.attach(0.125, &Automation::staticTickerCallbackChangeState, this);
-}
-
-void Automation::staticTickerCallbackChangeBrightness(Automation *pThis)
-{
-  Serial.println(F("Automation::staticTickerCallbackChangeBrightness"));
-  // pThis->changeBrightness();
-}
-
-void Automation::setupBrightness(uint32_t channelId, uint32_t controlPin)
-{
-  Serial.println(F("Automation::setupBrightness"));
-  Serial.print("setupBrightness: ch: ");
-  Serial.print(channelId);
-  Serial.print(" PIN: ");
-  Serial.println(controlPin);
-    // Setup timer and attach timer to a led pin
-  // ledcSetup(controlPin, DEFAULT_BRIGHTNESS_FREQ, DEFAULT_BRIGHTNESS_BIT);
-  // ledcAttachPin(controlPin, channelId);
-}
-
-void Automation::changeBrightness(uint8_t channelId, uint32_t value, uint32_t valueMax = 255) {
-  uint32_t brightness = (int)(value * 2.55);
-  // calculate duty, 4095 from 2 ^ 12 - 1
-  uint32_t duty = (4095 / valueMax) * min(brightness, valueMax);
-
-  Serial.println(F("Automation::changeBrightness"));
-  // write duty to LEDC
-  // ledcWrite(channelId, duty);
 }
 
 void Automation::staticTickerCallbackChangeState(Automation *pThis)
@@ -74,25 +45,23 @@ void Automation::changeState()
   digitalWrite(LED, !(digitalRead(LED)));
 }
 
-void Automation::staticTickerCallbackTurnLedOff(Automation *pThis)
+void Automation::staticTickerCallbackTurnOff(Automation *pThis)
 {
-    pThis->turnLedOff();
+    pThis->turnOff();
 }
 
-void Automation::turnLedOff(){
-  Serial.println(F("Automation::turnLedOff"));
+void Automation::turnOff(){
   digitalWrite(LED, LED_OFF);
 }
 
-void Automation::staticTickerCallbackTurnLedOn(Automation *pThis)
+void Automation::staticTickerCallbackTurnOn(Automation *pThis)
 {
-    pThis->turnLedOn();
+    pThis->turnOn();
 }
 
-void Automation::turnLedOn(){
-  Serial.println(F("AUtomation::TURNLEDON"));
+void Automation::turnOn(){
   digitalWrite(LED, LED_ON);
-  _blinkerHeartBeatOff.once(0.125, &Automation::staticTickerCallbackTurnLedOff, this);
+  _blinkerHeartBeatOff.once(0.125, &Automation::staticTickerCallbackTurnOff, this);
 }
 
 void Automation::setSchedules(std::list<ScheduleTask>* scheduleTaskList){
@@ -104,7 +73,7 @@ void Automation::setSchedules(std::list<ScheduleTask>* scheduleTaskList){
         if(year > 1970){
           _validNTP = true;
           _blinkerHeartBeat.detach();
-          _blinkerHeartBeat.attach(2.0, &Automation::staticTickerCallbackTurnLedOn, this);    
+          _blinkerHeartBeat.attach(2.0, &Automation::staticTickerCallbackTurnOn, this);    
           for(std::list<ScheduleTask>::iterator i = scheduleTaskList->begin(); i != scheduleTaskList->end();)
             {
               i->channelTaskScheduler->setSchedule();

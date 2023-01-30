@@ -12,7 +12,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/xtensa_api.h"
-#include "driver/ledc.h"
 #include "esp_err.h"
 #include "channels.h"
 #include "esp32-hal-ledc.h"
@@ -20,40 +19,40 @@
 class ChannelStateService : public StatefulService<ChannelState> {
  public:
   ChannelStateService(AsyncWebServer* server,
-                    SecurityManager* securityManager,
-                    AsyncMqttClient* mqttClient,
-                    FS* fs,
-                    uint8_t channelControlPin,  // 5
-                    char* channelJsonConfigPath,  //  "/config/channelOneState.json"
-                    String restChannelEndPoint, //  "/rest/channelOneState"
-                    char* webSocketChannelEndPoint, //  "/ws/channelOneState"
-                    float  runEvery,         // run every 30 mins
-                    float  offAfter,         // stop after 5 mins
-                    int  startTimeHour,    // 8
-                    int  startTimeMinute,  // 30
-                    int  endTimeHour,      // 16
-                    int  endTimeMinute,    // 30
-                    bool    enabled,
-                    int brightness,
-                    String  channelName,
-                    bool  enableTimeSpan,
-                    ChannelMqttSettingsService* channelMqttSettingsService,
-                    bool randomize,
-                    float hotTimeHour,
-                    float overrideTime,
-                    bool enableMinimumRunTime,
-                    uint8_t homeAssistantTopicType,
-                    String homeAssistantIcon,
-                    bool enableRemoteConfiguration,
-                    String masterIPAddress,
-                    String restChannelRestartEndPoint,
-                    bool enableDateRange,
-                    bool activeOutsideDateRange,
-                    String  activeStartDateRange,
-                    String  activeEndDateRange,
-                    String buildVersion,
-                    String weekDays,
-                    int analogChannel);
+                      SecurityManager* securityManager,
+                      AsyncMqttClient* mqttClient,
+                      FS* fs,
+                      uint8_t channelControlPin,       // 5
+                      char* channelJsonConfigPath,     //  "/config/channelOneState.json"
+                      String restChannelEndPoint,      //  "/rest/channelOneState"
+                      char* webSocketChannelEndPoint,  //  "/ws/channelOneState"
+                      float runEvery,                  // run every 30 mins
+                      float offAfter,                  // stop after 5 mins
+                      int startTimeHour,               // 8
+                      int startTimeMinute,             // 30
+                      int endTimeHour,                 // 16
+                      int endTimeMinute,               // 30
+                      bool enabled,
+                      int brightness,
+                      String channelName,
+                      bool enableTimeSpan,
+                      ChannelMqttSettingsService* channelMqttSettingsService,
+                      bool randomize,
+                      float hotTimeHour,
+                      float overrideTime,
+                      bool enableMinimumRunTime,
+                      uint8_t homeAssistantTopicType,
+                      String homeAssistantIcon,
+                      bool enableRemoteConfiguration,
+                      String masterIPAddress,
+                      String restChannelRestartEndPoint,
+                      bool enableDateRange,
+                      bool activeOutsideDateRange,
+                      String activeStartDateRange,
+                      String activeEndDateRange,
+                      String buildVersion,
+                      String weekDays,
+                      int analogChannel);
 
   void begin();
   Channel getChannel();
@@ -75,23 +74,23 @@ class ChannelStateService : public StatefulService<ChannelState> {
   Ticker _deviceTime;
   Ticker _mqttRepublish;
 
-  int  _runEvery;         // run every 30 mins
-  int  _offAfter;         // stop after 5 mins
-  int  _startTimeHour;    // 8
-  int  _startTimeMinute;  // 30
-  int  _endTimeHour;      // 16
-  int  _endTimeMinute;    // 30
-  int  _hotTimeHour;      // 0 to 16hr
-  int  _overrideTime;     //
-  bool    _enabled;
+  int _runEvery;         // run every 30 mins
+  int _offAfter;         // stop after 5 mins
+  int _startTimeHour;    // 8
+  int _startTimeMinute;  // 30
+  int _endTimeHour;      // 16
+  int _endTimeMinute;    // 30
+  int _hotTimeHour;      // 0 to 16hr
+  int _overrideTime;     //
+  bool _enabled;
   int _brightness;
-  String  _channelName;
-  bool  _enableTimeSpan;
-  bool  _randomize;
-  bool  _isHotScheduleActive;
+  String _channelName;
+  bool _enableTimeSpan;
+  bool _randomize;
+  bool _isHotScheduleActive;
   String _offHotHourDateTime;
   String _controlOffDateTime;
-  bool  _isOverrideActive;
+  bool _isOverrideActive;
   bool _enableMinimumRunTime;
   uint8_t _homeAssistantTopicType;
   String _homeAssistantIcon;
@@ -123,6 +122,6 @@ class ChannelStateService : public StatefulService<ChannelState> {
   void onConfigUpdated();
   void updateStateIP(String IPAddress);
   void onSetupBrightness();
-  void onChangeBrightness();
+  void onChangeBrightness(uint32_t duty);
 };
 #endif

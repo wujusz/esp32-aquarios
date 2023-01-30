@@ -30,11 +30,11 @@ const Status: FC = () => {
     <>
       <div className={classes.flexContainer}>
         {ChannelApi.channels.map((channelId) => {
-            return (<div className={classes.flexChild}>
-              <div>
-                <div className={classes.muiListItemGutters}><ChannelStateWebSocketForm channelId={channelId}/> </div>
-              </div>
-            </div>);
+          return (<div className={classes.flexChild}>
+            <div>
+              <div className={classes.muiListItemGutters}><ChannelStateWebSocketForm channelId={channelId} /> </div>
+            </div>
+          </div>);
         })}
       </div>
     </>
