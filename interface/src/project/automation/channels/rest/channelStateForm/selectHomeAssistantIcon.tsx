@@ -8,7 +8,7 @@ import {
   mdiPrinter, mdiPrinterWireless, mdiSpeaker,
   mdiTelevision, mdiTelevisionAmbientLight,
   mdiToaster, mdiToasterOven, mdiWaterPump,
-  mdiLightbulbOn, mdiSpeakerMultiple
+  mdiLightbulbOn, mdiSpeakerMultiple, mdiLedOutline
 } from '@mdi/js';
 import { BlockFormControlLabel } from '../../../../../components';
 import { ChannelState } from '../../../redux/types/channel';
@@ -30,6 +30,7 @@ export function selectHomeAssistantIcon(data: ChannelState,
       <MenuItem value={"mdi:garage"}><Icon size={1} path={mdiGarage} />garage</MenuItem>
       <MenuItem value={"mdi:garage-variant"}><Icon size={1} path={mdiGarageVariant} />garage-variant</MenuItem>
       <MenuItem value={"mdi:lightbulb"}><Icon size={1} path={mdiLightbulbOn} />light</MenuItem>
+      <MenuItem value={"mdi:led-outline"}><Icon size={1} path={mdiLedOutline} />led</MenuItem>
       <MenuItem value={"mdi:microwave"}><Icon size={1} path={mdiMicrowave} />microwave</MenuItem>
       <MenuItem value={"mdi:power"}><Icon size={1} path={mdiPower} />power</MenuItem>
       <MenuItem value={"mdi:printer"}><Icon size={1} path={mdiPrinter} />printer</MenuItem>

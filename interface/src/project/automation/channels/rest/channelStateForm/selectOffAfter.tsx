@@ -20,6 +20,9 @@ export function selectOffAfter(data: ChannelState,
       <MenuItem value={0.066}>04 seconds</MenuItem>
       <MenuItem value={0.083}>05 seconds</MenuItem>
       <MenuItem value={0.1}>06 seconds</MenuItem>
+      <MenuItem value={0.116}>07 seconds</MenuItem>
+      <MenuItem value={0.133}>08 seconds</MenuItem>
+      <MenuItem value={0.15}>09 seconds</MenuItem>
       <MenuItem value={0.166}>10 seconds</MenuItem>
       <MenuItem value={0.2}>12 seconds</MenuItem>
       <MenuItem value={0.25}>15 seconds</MenuItem>
@@ -31,7 +34,9 @@ export function selectOffAfter(data: ChannelState,
       <MenuItem value={4}>4 minutes</MenuItem>
       <MenuItem value={5}>5 minutes</MenuItem>
       <MenuItem value={6}>6 minutes</MenuItem>
+      <MenuItem value={7}>7 minutes</MenuItem>
       <MenuItem value={8}>8 minutes</MenuItem>
+      <MenuItem value={9}>9 minutes</MenuItem>
       <MenuItem value={10}>10 minutes</MenuItem>
       <MenuItem value={15}>15 minutes</MenuItem>
       <MenuItem value={20}>20 minutes</MenuItem>

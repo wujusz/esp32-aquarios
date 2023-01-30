@@ -16,6 +16,7 @@ import NetworkTime from './framework/ntp/NetworkTime';
 import Mqtt from './framework/mqtt/Mqtt';
 import System from './framework/system/System';
 import Security from './framework/security/Security';
+import FilesManager from './framework/files/FilesManager';
 
 const AuthenticatedRouting: FC = () => {
   const { features } = useContext(FeaturesContext);
@@ -60,6 +61,7 @@ const AuthenticatedRouting: FC = () => {
           />
         )}
         <Route path="/system/*" element={<System />} />
+        <Route path="/files/*" element={<FilesManager />} />
         <Route path="/*" element={<Navigate to={AuthenticationApi.getDefaultRoute(features)} />} />
       </Routes>
     </Layout>

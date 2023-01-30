@@ -6,6 +6,9 @@
 #define OLD_CHANNEL_CONTROL_PIN "oldControlPin"
 #define NEW_CHANNEL_CONTROL_PIN "controlPin"
 
+#define OLD_CHANNEL_BRIGHTNESS "oldBrightness"
+#define NEW_CHANNEL_BRIGHTNESS "brightness"
+
 #define OLD_HA_TOPIC_TYPE "oldHomeAssistantTopicType"
 #define NEW_HA_TOPIC_TYPE "homeAssistantTopicType"
 
@@ -38,7 +41,12 @@
 #define CHANNEL_ONE_SOCKET_PATH "/ws/channelOneState"  // webSocketChannelEndPoint
 #define CHANNEL_ONE_DEFAULT_NAME "Water Pump X" //  defaultChannelName
 #define CHANNEL_ONE_CONFIG_JSON_PATH "/config/channelOneState.json"  // channelJsonConfigPath
+#define CHANNEL_ONE_SCHEDULE_RESTART_SERVICE_PATH "/rest/channelOneScheduleRestart"
+#define CHANNEL_ONE_BROKER_SETTINGS_FILE "/config/C1BrokerSettings.json"
+#define CHANNEL_ONE_BROKER_SETTINGS_PATH "/rest/ChannelOneBrokerSettings"
 #define CHANNEL_ONE_HOME_ASSISTANT_ENTITY "ch1"
+#define CHANNEL_ONE_DEFAULT_ID 1
+#define CHANNEL_ONE_BRIGHTNESS 0
 #define CHANNEL_ONE_DEFAULT_CONTROL_RUN_EVERY 15.0f
 #define CHANNEL_ONE_DEFAULT_CONTROL_OFF_AFTER 3.0f // minimum runtime
 #define CHANNEL_ONE_DEFAULT_CONTROL_START_TIME_HOUR 8
@@ -77,7 +85,12 @@
 #define CHANNEL_TWO_SOCKET_PATH "/ws/channelTwoState"  // webSocketChannelEndPoint
 #define CHANNEL_TWO_DEFAULT_NAME "Living Room Fridge" //  defaultChannelName
 #define CHANNEL_TWO_CONFIG_JSON_PATH "/config/channelTwoState.json"  // channelJsonConfigPath
+#define CHANNEL_TWO_SCHEDULE_RESTART_SERVICE_PATH "/rest/channelTwoScheduleRestart"
+#define CHANNEL_TWO_BROKER_SETTINGS_FILE "/config/C2BrokerSettings.json"
+#define CHANNEL_TWO_BROKER_SETTINGS_PATH "/rest/ChannelTwoBrokerSettings"
 #define CHANNEL_TWO_HOME_ASSISTANT_ENTITY "ch2"
+#define CHANNEL_TWO_DEFAULT_ID 2
+#define CHANNEL_TWO_BRIGHTNESS 0
 #define CHANNEL_TWO_DEFAULT_CONTROL_RUN_EVERY 30.0f
 #define CHANNEL_TWO_DEFAULT_CONTROL_OFF_AFTER 15.0f // minimum runtime
 #define CHANNEL_TWO_DEFAULT_CONTROL_START_TIME_HOUR 8
@@ -116,7 +129,12 @@
 #define CHANNEL_THREE_SOCKET_PATH "/ws/channelThreeState"  // webSocketChannelEndPoint
 #define CHANNEL_THREE_DEFAULT_NAME "Bedroom Light" //  defaultChannelName
 #define CHANNEL_THREE_CONFIG_JSON_PATH "/config/channelThreeState.json"  // channelJsonConfigPath
+#define CHANNEL_THREE_SCHEDULE_RESTART_SERVICE_PATH "/rest/channelThreeScheduleRestart"
+#define CHANNEL_THREE_BROKER_SETTINGS_FILE "/config/C3BrokerSettings.json"
+#define CHANNEL_THREE_BROKER_SETTINGS_PATH "/rest/ThreeBrokerSettings"
 #define CHANNEL_THREE_HOME_ASSISTANT_ENTITY "ch3"    // homeAssistantEntity
+#define CHANNEL_THREE_DEFAULT_ID 3
+#define CHANNEL_THREE_BRIGHTNESS 0
 #define CHANNEL_THREE_DEFAULT_CONTROL_RUN_EVERY 30.0f
 #define CHANNEL_THREE_DEFAULT_CONTROL_OFF_AFTER 5.0f // minimum runtime
 #define CHANNEL_THREE_DEFAULT_CONTROL_START_TIME_HOUR 1
@@ -155,7 +173,12 @@
 #define CHANNEL_FOUR_SOCKET_PATH "/ws/channelFourState"  // webSocketChannelEndPoint
 #define CHANNEL_FOUR_DEFAULT_NAME "Outside Lights" //  defaultChannelName
 #define CHANNEL_FOUR_CONFIG_JSON_PATH "/config/channelFourState.json"  // channelJsonConfigPath
+#define CHANNEL_FOUR_SCHEDULE_RESTART_SERVICE_PATH "/rest/channelFourScheduleRestart"
+#define CHANNEL_FOUR_BROKER_SETTINGS_FILE "/config/C4BrokerSettings.json"
+#define CHANNEL_FOUR_BROKER_SETTINGS_PATH "/rest/ChannelFourBrokerSettings"
 #define CHANNEL_FOUR_HOME_ASSISTANT_ENTITY "ch4"    // homeAssistantEntity
+#define CHANNEL_FOUR_DEFAULT_ID 4
+#define CHANNEL_FOUR_BRIGHTNESS 0
 #define CHANNEL_FOUR_DEFAULT_CONTROL_RUN_EVERY 30.0f
 #define CHANNEL_FOUR_DEFAULT_CONTROL_OFF_AFTER 5.0f // minimum runtime
 #define CHANNEL_FOUR_DEFAULT_CONTROL_START_TIME_HOUR 19

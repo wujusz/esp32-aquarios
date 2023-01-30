@@ -45,23 +45,23 @@ void Automation::changeState()
   digitalWrite(LED, !(digitalRead(LED)));
 }
 
-void Automation::staticTickerCallbackTurnLedOff(Automation *pThis)
+void Automation::staticTickerCallbackTurnOff(Automation *pThis)
 {
-    pThis->turnLedOff();
+    pThis->turnOff();
 }
 
-void Automation::turnLedOff(){
+void Automation::turnOff(){
   digitalWrite(LED, LED_OFF);
 }
 
-void Automation::staticTickerCallbackTurnLedOn(Automation *pThis)
+void Automation::staticTickerCallbackTurnOn(Automation *pThis)
 {
-    pThis->turnLedOn();
+    pThis->turnOn();
 }
 
-void Automation::turnLedOn(){
+void Automation::turnOn(){
   digitalWrite(LED, LED_ON);
-  _blinkerHeartBeatOff.once(0.125, &Automation::staticTickerCallbackTurnLedOff, this);
+  _blinkerHeartBeatOff.once(0.125, &Automation::staticTickerCallbackTurnOff, this);
 }
 
 void Automation::setSchedules(std::list<ScheduleTask>* scheduleTaskList){
@@ -73,7 +73,7 @@ void Automation::setSchedules(std::list<ScheduleTask>* scheduleTaskList){
         if(year > 1970){
           _validNTP = true;
           _blinkerHeartBeat.detach();
-          _blinkerHeartBeat.attach(2.0, &Automation::staticTickerCallbackTurnLedOn, this);    
+          _blinkerHeartBeat.attach(2.0, &Automation::staticTickerCallbackTurnOn, this);    
           for(std::list<ScheduleTask>::iterator i = scheduleTaskList->begin(); i != scheduleTaskList->end();)
             {
               i->channelTaskScheduler->setSchedule();

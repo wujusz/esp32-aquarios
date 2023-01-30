@@ -1,38 +1,18 @@
 import React, { FC, useContext } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Tab } from '@mui/material';
-
 import { RequireAdmin, RouterTabs, useLayoutTitle, useRouterTab } from '../../components';
 import { AuthenticatedContext } from '../../contexts/authentication';
 
-import MqttStatusForm from '../mqtt/MqttStatusForm';
-import MqttSettingsForm from '../mqtt/MqttSettingsForm';
 
 const FilesManager: FC = () => {
-  useLayoutTitle("MQTT");
+  useLayoutTitle("File manager");
 
-  const authenticatedContext = useContext(AuthenticatedContext);
-  const { routerTab } = useRouterTab();
+  console.log('fileManager loaded');
 
   return (
     <>
-      <RouterTabs value={routerTab}>
-        <Tab value="status" label="MQTT Status" />
-        <Tab value="settings" label="MQTT Settings" disabled={!authenticatedContext.me.admin} />
-      </RouterTabs>
-      <Routes>
-        <Route path="status" element={<MqttStatusForm />} />
-        <Route
-          path="settings"
-          element={
-            <RequireAdmin>
-              <MqttSettingsForm />
-            </RequireAdmin>
-          }
-        />
-        <Route path="/*" element={<Navigate replace to="status" />} />
-      </Routes>
+      
     </>
   );
 
