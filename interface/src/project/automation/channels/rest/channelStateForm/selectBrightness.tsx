@@ -33,5 +33,5 @@ export function selectBrightness(data: ChannelState,
       max={100}
       onChange={handleBrightnessChange}
     />
-  </div>)
-}
+  </div>
+)}

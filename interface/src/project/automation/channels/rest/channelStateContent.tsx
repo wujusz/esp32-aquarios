@@ -141,10 +141,8 @@ export function channelStateContent(data: ChannelState | undefined,
           margin="normal"
         />
         {selectControlPin(data, handleChannelStateValueChange)}
-
         {selectHomeAssistantTopicType(data, handleChannelStateValueChange)}
         {selectHomeAssistantIcon(data, handleChannelStateValueChange)}
-        
         {data.homeAssistantTopicType === 2 && selectBrightness(data, handleBrightness)}
 
         <BlockFormControlLabel

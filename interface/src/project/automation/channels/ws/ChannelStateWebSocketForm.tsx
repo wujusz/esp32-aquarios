@@ -47,7 +47,7 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({ channel
           />
         </ListItem>
 
-        {data.homeAssistantTopicType != 2 && (
+        {data.homeAssistantTopicType !== 2 && (
           <BlockFormControlLabel
             control={
               <Switch

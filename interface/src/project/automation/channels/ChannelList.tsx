@@ -43,7 +43,6 @@ const ChannelListForm: FC = () => {
     }
 
     const showChannel = (channelUrl: string) => {
-
     }
 
     return (
@@ -100,8 +99,6 @@ const ChannelListForm: FC = () => {
       {content()}
     </SectionContent>
   );
-
-
 };
 
 export default ChannelListForm;

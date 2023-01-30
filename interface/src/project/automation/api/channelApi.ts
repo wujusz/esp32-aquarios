@@ -19,7 +19,7 @@ export const createReadChannelBrokerSettingsApi = (channelId: string): AxiosProm
      return AXIOS.get(`${RemoteUtils.getApiBaseAddress()}Channel${channelId}BrokerSettings`);
 };
 
-export const createUpdateChannelBrokerSettingsApi = 
+export const createUpdateChannelBrokerSettingsApi =
 (channelId: string, channelMqttSettings: ChannelMqttSettings): AxiosPromise<ChannelMqttSettings> => {
      return AXIOS.post(`${RemoteUtils.getApiBaseAddress()}Channel${channelId}BrokerSettings`, channelMqttSettings);
 };
