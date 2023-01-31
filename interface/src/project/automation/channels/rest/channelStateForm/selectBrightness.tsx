@@ -23,7 +23,6 @@ export function selectBrightness(data: ChannelState,
     </Typography>
     <Slider
       name="brightness"
-      disabled={!data.enabled}
       defaultValue={data.brightness}
       aria-labelledby="discrete-slider-custom"
       step={10}
