@@ -6,9 +6,6 @@
 
 #define DEFAULT_LED_STATE false
 #define DEFAULT_CONTROL_STATE false
-#define DEFAULT_BRIGHTNESS_STATE 100
-#define DEFAULT_BRIGHTNESS_FREQ 5000
-#define DEFAULT_BRIGHTNESS_BIT 8
 
 #define DEFAULT_JSON_DOCUMENT_SIZE 2048
 
@@ -18,8 +15,8 @@ struct CurrentTime {
 };
 
 class ChannelState {
- public:
-  Channel channel;
+public:
+ Channel channel;
   static void read(ChannelState& settings, JsonObject& root) {
     readChannel(settings.channel, root);
   }
@@ -31,74 +28,67 @@ class ChannelState {
     }
     return StateUpdateResult::UNCHANGED;
   }
-
+  
   static StateUpdateResult wsUpdate(JsonObject& root, ChannelState& settings) {
     boolean newState = root["controlOn"] | DEFAULT_CONTROL_STATE;
-    int newBrightness = root["brightness"] | DEFAULT_BRIGHTNESS_STATE;
-
-    if ((settings.channel.controlOn != newState || (settings.channel.brightness != newBrightness))) {
+    if (settings.channel.controlOn != newState) {
       settings.channel.controlOn = newState;
       settings.channel.schedule.isOverride = true;
-      settings.channel.brightness = newBrightness;
-
       return StateUpdateResult::CHANGED;
     }
-
     return StateUpdateResult::UNCHANGED;
   }
 
-  static void haRead(ChannelState& settings, JsonObject& root) {
+static void haRead(ChannelState& settings, JsonObject& root) {
     root["state"] = settings.channel.controlOn ? ON_STATE : OFF_STATE;
     root["Version"] = settings.channel.buildVersion;
-    root["Device_Admin_Url"] = utils.getDeviceChannelUrl(settings.channel);
+    root["Admin_Url"] = utils.getDeviceChannelUrl(settings.channel);
     root["Control_Pin"] = settings.channel.controlPin;
-    root["Channel_Name"] = settings.channel.name;
-    root["MAC_Address"] = SettingValue::format("#{unique_id}");
-    root["Device_IP"] = settings.channel.IP;
+    //root["Channel_Name"] = settings.channel.name;
+    root["MAC"] = SettingValue::format("#{unique_id}");
+    root["IP"] = settings.channel.IP;
 
-    if (settings.channel.enabled) {
+    if(settings.channel.enabled){
       root["Active_Days"] = utils.getActiveWeekDays(settings.channel.schedule.weekDays);
-      if (settings.channel.enableDateRange) {
+      if(settings.channel.enableDateRange){
         time_t currentTime = time(nullptr);
-        DateRange dateRange = utils.getActiveDateRange(
-            settings.channel.activeStartDateRange, settings.channel.activeEndDateRange, currentTime);
-        if (dateRange.valid) {
+        DateRange dateRange = utils.getActiveDateRange(settings.channel.activeStartDateRange,
+        settings.channel.activeEndDateRange, currentTime);
+        if(dateRange.valid){
           String startDate = utils.eraseLineFeed(ctime(&dateRange.startDate));
-          startDate.remove(10, 9);
+          startDate.remove(10,9);
           String endDate = utils.eraseLineFeed(ctime(&dateRange.endDate));
-          endDate.remove(10, 9);
-          root["Start_Date"] = startDate;
-          root["End_Date"] = endDate;
-
-          if (settings.channel.activeOutsideDateRange) {
-            root["Active_Outside_Date_Range"] = "Enabled";
+          endDate.remove(10,9);
+          root["From"] = startDate;
+          root["To"] = endDate;
+          
+          if(settings.channel.activeOutsideDateRange){
+            root["Active_Outside_Dates"] = "Yes";
           }
         }
       }
-      root["Start_Time"] =
-          utils.formatTime(settings.channel.schedule.startTimeHour, settings.channel.schedule.startTimeMinute) + " H";
-      root["End_Time"] =
-          utils.formatTime(settings.channel.schedule.endTimeHour, settings.channel.schedule.endTimeMinute) + " H";
+      root["Start_Time"] = utils.formatTime(settings.channel.schedule.startTimeHour, settings.channel.schedule.startTimeMinute) + " H";
+      root["End_Time"] = utils.formatTime(settings.channel.schedule.endTimeHour, settings.channel.schedule.endTimeMinute) + " H";
 
-      if (settings.channel.schedule.overrideTime > 0) {
+      if(settings.channel.schedule.overrideTime > 0){
         root["Override_Time"] = utils.formatTimePeriod(settings.channel.schedule.overrideTime);
       }
 
-      if (!settings.channel.enableTimeSpan) {
+      if(!settings.channel.enableTimeSpan){
         root["Run_Every"] = utils.formatTimePeriod(settings.channel.schedule.runEvery);
         root["Off_After"] = utils.formatTimePeriod(settings.channel.schedule.offAfter);
 
-        if (settings.channel.randomize) {
-          if (settings.channel.schedule.hotTimeHour > 0) {
+        if(settings.channel.randomize){
+          if(settings.channel.schedule.hotTimeHour > 0){
             root["Hot_Time"] = utils.formatTimePeriod(settings.channel.schedule.hotTimeHour);
           }
 
-          if (settings.channel.enableMinimumRunTime) {
-            root["Minimum_Run_Time"] = "Enabled";
+          if(settings.channel.enableMinimumRunTime){
+            root["Minimum_Run_Time"] = "Yes";
           }
         }
       }
-    } else {
+    }else{
       root["Schedule"] = "Disabled";
     }
   }
@@ -114,16 +104,16 @@ class ChannelState {
       return StateUpdateResult::ERROR;
     }
     // change the new state, if required
-    if (settings.channel.controlOn != newState) {
-      settings.channel.controlOn = newState;
+    if (settings.channel.controlOn  != newState) {
+      settings.channel.controlOn  = newState;
       return StateUpdateResult::CHANGED;
     }
     return StateUpdateResult::UNCHANGED;
   }
 
- private:
+  private:
   static void readChannel(Channel& channel, JsonObject jsonObject) {
-    time_t tnow = time(nullptr);
+     time_t tnow = time(nullptr);
     jsonObject["localDateTime"] = utils.eraseLineFeed(ctime(&tnow));
     jsonObject["controlPin"] = channel.controlPin;
     jsonObject["homeAssistantTopicType"] = channel.homeAssistantTopicType;
@@ -131,7 +121,6 @@ class ChannelState {
     jsonObject["controlOn"] = channel.controlOn;
     jsonObject["name"] = channel.name;
     jsonObject["enabled"] = channel.enabled;
-    jsonObject["brightness"] = channel.brightness;
     jsonObject["enableTimeSpan"] = channel.enableTimeSpan;
     jsonObject["lastStartedChangeTime"] = channel.lastStartedChangeTime;
     jsonObject["nextRunTime"] = channel.nextRunTime;
@@ -146,157 +135,126 @@ class ChannelState {
     jsonObject["enableDateRange"] = channel.enableDateRange;
     jsonObject["activeOutsideDateRange"] = channel.activeOutsideDateRange;
     jsonObject["buildVersion"] = channel.buildVersion;
-    jsonObject["analogChannel"] = channel.analogChannel;
+
 
     JsonArray activeDateRange = jsonObject.createNestedArray("activeDateRange");
     activeDateRange.add(channel.activeStartDateRange);
     activeDateRange.add(channel.activeEndDateRange);
 
     JsonObject schedule = jsonObject.createNestedObject("schedule");
-
-    schedule["runEvery"] = floor(float(float(channel.schedule.runEvery) / float(60)) * 1000) * 0.001;
-    schedule["offAfter"] = floor(float(float(channel.schedule.offAfter) / float(60)) * 1000) * 0.001;
-    schedule["startTimeHour"] = round(float(float(channel.schedule.startTimeHour) / float(3600)) * 1000) / 1000;
-    schedule["startTimeMinute"] = round(float(float(channel.schedule.startTimeMinute) / float(60)) * 1000) / 1000;
-    schedule["hotTimeHour"] = round(float(float(channel.schedule.hotTimeHour) / float(3600)) * 1000) / 1000;
-    schedule["overrideTime"] = floor(float(float(channel.schedule.overrideTime) / float(60)) * 1000) * 0.001;
-    schedule["endTimeHour"] = round(float(float(channel.schedule.endTimeHour) / float(3600)) * 1000) / 1000;
-    schedule["endTimeMinute"] = round(float(float(channel.schedule.endTimeMinute) / float(60)) * 1000) / 1000;
+      
+    schedule["runEvery"] = floor(float(float(channel.schedule.runEvery)/float(60)) * 1000) * 0.001;
+    schedule["offAfter"] = floor(float(float(channel.schedule.offAfter)/float(60)) * 1000) * 0.001;
+    schedule["startTimeHour"] = round(float(float(channel.schedule.startTimeHour)/float(3600)) * 1000) / 1000;
+    schedule["startTimeMinute"] = round(float(float(channel.schedule.startTimeMinute)/float(60)) * 1000) / 1000;
+    schedule["hotTimeHour"] = round(float(float(channel.schedule.hotTimeHour)/float(3600)) * 1000) /1000;
+    schedule["overrideTime"] = floor(float(float(channel.schedule.overrideTime)/float(60)) * 1000) * 0.001;
+    schedule["endTimeHour"] = round(float(float(channel.schedule.endTimeHour)/float(3600)) * 1000) / 1000;
+    schedule["endTimeMinute"] = round(float(float(channel.schedule.endTimeMinute)/float(60)) * 1000) / 1000;
     schedule["isOverride"] = channel.schedule.isOverride;
 
     JsonArray weekDays = schedule.createNestedArray("weekDays");
-    for (int day = 0; day < 7; day++) {
-      int value = channel.schedule.weekDays[day];
-      if (value > -1) {
-        weekDays.add(value);
-      }
+    for (int day = 0; day < 7; day++){  
+      int value = channel.schedule.weekDays[day]; 
+      if(value > -1){weekDays.add(value);}
     }
-
+    
     JsonObject scheduled = jsonObject.createNestedObject("scheduledTime");
-    ScheduledTime scheduledTime =
-        utils.getScheduleTimes((channel.schedule.startTimeHour + channel.schedule.startTimeMinute),
-                               (channel.schedule.endTimeHour + channel.schedule.endTimeMinute),
-                               channel.schedule.hotTimeHour,
-                               channel.enableTimeSpan,
-                               channel.isHotScheduleActive,
-                               channel.name,
-                               channel.randomize,
-                               channel.schedule.isOverrideActive,
-                               channel.enableMinimumRunTime);
+    ScheduledTime scheduledTime = utils.getScheduleTimes(
+      (channel.schedule.startTimeHour + channel.schedule.startTimeMinute),
+      (channel.schedule.endTimeHour + channel.schedule.endTimeMinute),
+      channel.schedule.hotTimeHour,
+      channel.enableTimeSpan,
+      channel.isHotScheduleActive,
+      channel.name,
+      channel.randomize,
+      channel.schedule.isOverrideActive,
+      channel.enableMinimumRunTime);
 
     scheduled["channelName"] = scheduledTime.channelName;
     scheduled["scheduleTime"] = (int)scheduledTime.scheduleTime;
     scheduled["isHotSchedule"] = scheduledTime.isHotSchedule;
     scheduled["isSpanSchedule"] = scheduledTime.isSpanSchedule;
-    scheduled["isHotScheduleActive:"] = scheduledTime.isHotScheduleActive;
+    scheduled["isHotScheduleActive:"] =  scheduledTime.isHotScheduleActive;
     scheduled["isRunTaskNow"] = scheduledTime.isRunTaskNow;
     scheduled["currentTime"] = utils.eraseLineFeed(ctime(&scheduledTime.currentTime));
     scheduled["startTimeSeconds"] = (int)scheduledTime.startTime;
     scheduled["endTimeSeconds"] = (int)scheduledTime.endTime;
     scheduled["startDateTime"] = utils.eraseLineFeed(ctime(&scheduledTime.scheduleStartDateTime));
-
-    if (scheduledTime.isHotSchedule) {
+    
+    if(scheduledTime.isHotSchedule){
       scheduled["hotTimeEndDateTime"] = utils.eraseLineFeed(ctime(&scheduledTime.scheduleHotTimeEndDateTime));
-      scheduled["offHotHourDateTime"] = channel.offHotHourDateTime;
+      scheduled["offHotHourDateTime"] = channel.offHotHourDateTime; 
     }
     scheduled["controlOffDateTime"] = channel.controlOffDateTime;
     scheduled["endDateTime"] = utils.eraseLineFeed(ctime(&scheduledTime.scheduleEndDateTime));
-    scheduled["isOverrideActive"] = scheduledTime.isOverrideActive;
+    scheduled["isOverrideActive"] = scheduledTime.isOverrideActive;  
   }
 
-  static void updateChannel(JsonObject& json, Channel& channel) {
-    channel.controlPin = json["controlPin"] | channel.controlPin;
-    channel.homeAssistantTopicType = json["homeAssistantTopicType"] | channel.homeAssistantTopicType;
+static void updateChannel(JsonObject& json, Channel& channel) { 
+    channel.controlPin = json["controlPin"] | channel.controlPin; 
+    channel.homeAssistantTopicType = json["homeAssistantTopicType"] | channel.homeAssistantTopicType ;
     channel.homeAssistantIcon = json["homeAssistantIcon"] | channel.homeAssistantIcon;
     channel.controlOn = json["controlOn"] | DEFAULT_CONTROL_STATE;
     channel.name = json["name"] | channel.name;
     channel.enabled = json["enabled"] | channel.enabled;
-    channel.brightness = json["brightness"] | channel.brightness;
     channel.enableTimeSpan = json["enableTimeSpan"] | channel.enableTimeSpan;
     channel.lastStartedChangeTime = json["lastStartedChangeTime"] | utils.strLocalTime();
     channel.nextRunTime = json["nextRunTime"] | "";
     channel.randomize = json["randomize"] | channel.randomize;
-    channel.uniqueId =
-        json["uniqueId"] | utils.getMqttUniqueIdOrPath(channel.controlPin, channel.homeAssistantTopicType, true);
+    channel.uniqueId = json["uniqueId"] |  utils.getMqttUniqueIdOrPath(channel.controlPin, channel.homeAssistantTopicType, true);
     channel.enableMinimumRunTime = json["enableMinimumRunTime"] | channel.enableMinimumRunTime;
     channel.enableRemoteConfiguration = json["enableRemoteConfiguration"] | channel.enableRemoteConfiguration;
     channel.masterIPAddress = json["masterIPAddress"] | channel.masterIPAddress;
     channel.enableDateRange = json["enableDateRange"] | channel.enableDateRange;
     channel.activeOutsideDateRange = json["activeOutsideDateRange"] | channel.activeOutsideDateRange;
-    channel.analogChannel = json["analogChannel"] | channel.analogChannel;
+    
 
     JsonArray activeDateRange = json["activeDateRange"];
 
-    DateRange dateRange =
-        utils.getActiveDateRange(activeDateRange[0].as<String>(), activeDateRange[1].as<String>(), time(nullptr));
-
-    if (dateRange.valid) {
-      struct tm* startDate = localtime(&dateRange.startDate);
-      char activeStartDateRange[32];
-      strftime(activeStartDateRange, sizeof(activeStartDateRange), UTC_DATE_FORMAT, startDate);
-      channel.activeStartDateRange = activeStartDateRange;
-
-      struct tm* endDate = localtime(&dateRange.endDate);
-      char activeEndDateRange[32];
-      strftime(activeEndDateRange, sizeof(activeEndDateRange), UTC_DATE_FORMAT, endDate);
-      channel.activeEndDateRange = activeEndDateRange;
+    DateRange dateRange = utils.getActiveDateRange(activeDateRange[0].as<String>(), activeDateRange[1].as<String>(),time(nullptr));
+    
+    if(dateRange.valid){
+      channel.activeStartDateRange = utils.formatDateToUTC(dateRange.startDate);
+      channel.activeEndDateRange = utils.formatDateToUTC(dateRange.endDate);
     }
-
+   
     JsonObject schedule = json["schedule"];
-    channel.schedule.runEvery =
-        schedule["runEvery"] ? (int)(round(60 * float(schedule["runEvery"]))) : channel.schedule.runEvery;
-    channel.schedule.offAfter =
-        schedule["offAfter"] ? (int)(round(60 * float(schedule["offAfter"]))) : channel.schedule.offAfter;
-    channel.schedule.startTimeHour = schedule["startTimeHour"] ? (int)(round(3600 * float(schedule["startTimeHour"])))
-                                                               : channel.schedule.startTimeHour;
-    channel.schedule.startTimeMinute = schedule["startTimeMinute"]
-                                           ? (int)(round(60 * float(schedule["startTimeMinute"])))
-                                           : channel.schedule.startTimeMinute;
-    if (channel.schedule.startTimeMinute >= 3600) {
-      channel.schedule.startTimeMinute = 0;
-    }
-    channel.schedule.endTimeHour =
-        schedule["endTimeHour"] ? (int)(round(3600 * float(schedule["endTimeHour"]))) : channel.schedule.endTimeHour;
-    channel.schedule.endTimeMinute = schedule["endTimeMinute"] ? (int)(round(60 * float(schedule["endTimeMinute"])))
-                                                               : channel.schedule.endTimeMinute;
-    if (channel.schedule.endTimeMinute >= 3600) {
-      channel.schedule.endTimeMinute = 0;
-    }
+    channel.schedule.runEvery = schedule["runEvery"] ? (int)(round(60 * float(schedule["runEvery"]))) : channel.schedule.runEvery;
+    channel.schedule.offAfter = schedule["offAfter"] ? (int)(round(60 * float(schedule["offAfter"]))) : channel.schedule.offAfter;
+    channel.schedule.startTimeHour = schedule["startTimeHour"] ? (int)(round(3600 * float(schedule["startTimeHour"]))) : channel.schedule.startTimeHour;
+    channel.schedule.startTimeMinute = schedule["startTimeMinute"] ? (int)(round(60 * float(schedule["startTimeMinute"]))) : channel.schedule.startTimeMinute;
+    if (channel.schedule.startTimeMinute >= 3600) { channel.schedule.startTimeMinute  = 0; }
+    channel.schedule.endTimeHour = schedule["endTimeHour"] ? (int)(round(3600 * float(schedule["endTimeHour"]))) : channel.schedule.endTimeHour;
+    channel.schedule.endTimeMinute = schedule["endTimeMinute"] ? (int)(round(60 * float(schedule["endTimeMinute"]))) : channel.schedule.endTimeMinute;
+    if (channel.schedule.endTimeMinute >= 3600) { channel.schedule.endTimeMinute  = 0; }
 
     channel.schedule.isOverride = schedule["isOverride"];
 
-    channel.schedule.hotTimeHour =
-        schedule["hotTimeHour"] ? (int)(round(3600 * float(schedule["hotTimeHour"]))) : channel.schedule.hotTimeHour;
-    channel.schedule.overrideTime =
-        schedule["overrideTime"] ? (int)(round(60 * float(schedule["overrideTime"]))) : channel.schedule.overrideTime;
+    channel.schedule.hotTimeHour = schedule["hotTimeHour"] ? (int)(round(3600 * float(schedule["hotTimeHour"]))) : channel.schedule.hotTimeHour;
+    channel.schedule.overrideTime = schedule["overrideTime"] ? (int)(round(60 * float(schedule["overrideTime"]))) : channel.schedule.overrideTime;
+    
+    if ((channel.schedule.hotTimeHour > 57600) | (channel.schedule.hotTimeHour < 0)) { channel.schedule.hotTimeHour  = 0; }
+  
+    if ((channel.schedule.overrideTime > 57600) | (channel.schedule.overrideTime < 0)) { channel.schedule.overrideTime  = 0; }
 
-    if ((channel.schedule.hotTimeHour > 57600) | (channel.schedule.hotTimeHour < 0)) {
-      channel.schedule.hotTimeHour = 0;
-    }
-
-    if ((channel.schedule.overrideTime > 57600) | (channel.schedule.overrideTime < 0)) {
-      channel.schedule.overrideTime = 0;
-    }
-
-    if (schedule["weekDays"]) {
-      for (int i = 0; i < 7; i++) {
-        channel.schedule.weekDays[i] = -1;
+    if (schedule["weekDays"]){
+      for (int i = 0; i< 7; i++){
+       channel.schedule.weekDays[i] = -1;
       }
       JsonArray weekDays = schedule["weekDays"];
-      for (JsonVariant v : weekDays) {
+      for(JsonVariant v : weekDays) {
         int day = v.as<int>();
         channel.schedule.weekDays[day] = day;
       }
     }
   }
 
-  static boolean dataIsValid(JsonObject& json, ChannelState& channelState) {
+  static boolean dataIsValid(JsonObject& json, ChannelState& channelState){
     // TO DO to be expanded for more validation
     JsonObject schedule = json["schedule"];
-    int runEvery =
-        schedule["runEvery"] ? (int)(round(60 * float(schedule["runEvery"]))) : channelState.channel.schedule.runEvery;
-    int offAfter =
-        schedule["offAfter"] ? (int)(round(60 * float(schedule["offAfter"]))) : channelState.channel.schedule.offAfter;
+    int runEvery = schedule["runEvery"] ? (int)(round(60 * float(schedule["runEvery"]))) : channelState.channel.schedule.runEvery;
+    int offAfter = schedule["offAfter"] ? (int)(round(60 * float(schedule["offAfter"]))) : channelState.channel.schedule.offAfter;
     return (runEvery > offAfter);
   }
 };

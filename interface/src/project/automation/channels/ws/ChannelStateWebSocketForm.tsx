@@ -1,36 +1,34 @@
 import { FC } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 import { useLocation } from 'react-router';
 import { ListItem, ListItemText, Switch, Typography } from '@mui/material';
 
 import { BlockFormControlLabel, FormLoader, SectionContent } from '../../../../components';
 import { updateValue, useWs } from '../../../../utils';
 
-import { ChannelState } from '../../redux/types/channel';
+import { ChannelState} from '../../redux/types/channel';
 import { RemoteUtils } from '../../utils/remoteUtils';
 import { ChannelStateWebSocketFormProps } from './ws';
-import { selectBrightness } from '../rest/channelStateForm/selectBrightness';
 
-const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({ channelId }) => {
-  const websocketEndPoint = `channel${channelId}State`;
+const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({websocketEndPoint}) => {
   const { connected, updateData, data } = useWs<ChannelState>(`${RemoteUtils.getWsBaseAddress()}${websocketEndPoint}`);
   const updateFormValue = updateValue(updateData);
   const pathname = useLocation().pathname;
   const showLink = pathname.includes('/status');
-  const navigate = useNavigate();
+  const navigate  = useNavigate ();
   const onClick = () => navigate(RemoteUtils.getNavigationLink('auto', data?.restChannelEndPoint));
-  const switchType = 2; //led type switch
+
   const content = () => {
     if (!connected || !data) {
       return (<FormLoader message="Connecting to WebSocket…" />);
     }
 
-    if (!data.schedule && RemoteUtils.isRemoteDevice()) {
+    if(!data.schedule && RemoteUtils.isRemoteDevice()){
       const networkErrorMessage = `Remote device ${RemoteUtils.getRemoteDeviceUrl()} unreachable`;
-      return (<FormLoader errorMessage={networkErrorMessage} />);
+      return (<FormLoader  errorMessage={networkErrorMessage} />);
     }
 
-    if (!data.schedule) {
+    if(!data.schedule){
       const networkErrorMessage = `Requested ${RemoteUtils.getLastPathItem(window.location.pathname)} is not configured`;
       return (<FormLoader errorMessage={networkErrorMessage} />);
     }
@@ -39,16 +37,8 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({ channel
       <>
         <Typography variant="subtitle1">{data.name}</Typography>
         <Typography variant="body2">{`Channel control pin ${data.controlPin}`}</Typography>
-        <Typography variant="body2">{`Channel type ${data.homeAssistantTopicType}`}</Typography>
         <ListItem>
-          <ListItemText
-            primary={`Scheduled ${data.nextRunTime.substr(0, data.nextRunTime.lastIndexOf(' '))}`}
-            secondary={`Last status at ${data.lastStartedChangeTime.substr(0, data.lastStartedChangeTime.lastIndexOf(' '))}`}
-          />
-        </ListItem>
-
-        {data.homeAssistantTopicType !== 2 && (
-          <BlockFormControlLabel
+        <BlockFormControlLabel
             control={
               <Switch
                 name="controlOn"
@@ -58,16 +48,17 @@ const ChannelStateWebSocketForm: FC<ChannelStateWebSocketFormProps> = ({ channel
               />
             }
             label="Switch Status"
-          />
-        )}
-
-        {data.homeAssistantTopicType === switchType && selectBrightness(data, updateFormValue)}
-
+        />
+        <ListItemText
+          primary={`Scheduled ${data.nextRunTime.substr(0, data.nextRunTime.lastIndexOf(' '))}`}
+          secondary={`Last status at ${data.lastStartedChangeTime.substr(0, data.lastStartedChangeTime.lastIndexOf(' '))}`}
+        />
+        </ListItem>
         {showLink && (
-          <Typography variant="body1"><a onClick={onClick} href="#">Schedule</a></Typography>
-        )}
+        // eslint-disable-next-line jsx-a11y/anchor-is-valid
+        <Typography variant="body1"><a onClick={onClick} href="#">Schedule</a></Typography>)}
         <Typography variant="overline">
-          {`IP: ${data.IPAddress} Time: ${data.localDateTime.substr(0, data.localDateTime.lastIndexOf(':'))}`}
+          {`IP: ${data.IPAddress} Time: ${data.localDateTime.substr(0,data.localDateTime.lastIndexOf(':'))}`}
         </Typography>
       </>
     );

@@ -1,15 +1,11 @@
 export interface Schedule{
-  runEvery: number;
-  offAfter: number;
-  startTimeHour: number;
-  startTimeMinute: number;
-  endTimeHour: number;
-  endTimeMinute: number;
-  hotTimeHour: number;
-  overrideTime: number;
-  weekDays: Array<number>;
-}
-
-export interface Schedules {
-  schedules: Schedule[]
-}
+    runEvery: number;
+    offAfter: number;
+    startTimeHour: number;
+    startTimeMinute: number;
+    endTimeHour: number;
+    endTimeMinute: number;
+    hotTimeHour: number;
+    overrideTime: number;
+    weekDays: Array<number>;
+  }

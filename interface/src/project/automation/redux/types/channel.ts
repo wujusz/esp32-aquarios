@@ -1,4 +1,4 @@
-import { Schedule, Schedules } from './schedule';
+import { Schedule } from './schedule';
 
 export const CHANNEL = '[Channel Schedule]';
 export const RESTART = '[Restart]';
@@ -25,16 +25,17 @@ export interface ChannelSettings {
 }
 
 export interface Channels {
-  channels: ChannelSettings[];
+  channelOne: ChannelSettings;
+  channelTwo: ChannelSettings;
+  channelThree: ChannelSettings;
+  channelFour: ChannelSettings;
 }
 
 export interface ChannelState {
   controlOn: boolean;
   name: string;
   enabled: boolean;
-  brightness: number;
   schedule: Schedule;
-  schedules: Schedules;
   enableTimeSpan: boolean;
   lastStartedChangeTime: string;
   controlPin: number;
@@ -55,11 +56,6 @@ export interface ChannelState {
   activeOutsideDateRange: boolean;
   activeDateRange: Array<string>;
   buildVersion: string;
-  analogChannel: number;
-}
-
-export interface ChannelList {
-  channels: ChannelState[]
 }
 
 export interface ChannelStateFuncs {

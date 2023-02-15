@@ -23,7 +23,6 @@ class TaskScheduler {
                     int  endTimeHour,      // 16
                     int  endTimeMinute,    // 30
                     bool    enabled,
-                    int brightness,
                     String  channelName,
                     bool  enableTimeSpan,
                     ChannelMqttSettingsService* channelMqttSettingsService,
@@ -41,8 +40,7 @@ class TaskScheduler {
                     String  activeStartDateRange,
                     String  activeEndDateRange,
                     String buildVersion,
-                    String weekDays,
-                    int analogChannel);
+                    String weekDays);
     void begin();
     void resetOverrideTime();
     void setOverrideTime();
@@ -60,7 +58,6 @@ class TaskScheduler {
     void runHotTask();
     void controlOn();
     void controlOff();
-    void changeBrightness();
     void scheduleRunEveryTask();
     void scheduleHotTask();
     void toggleSwitch();
@@ -124,7 +121,6 @@ class TaskScheduler {
     uint8_t getChannelControlPin();
     uint8_t getChannelHomeAssistantTopicType();
     bool getChannelEnableDateRange();
-    uint8_t getBrightness();
 
     private:
     int _toggleReadPin;

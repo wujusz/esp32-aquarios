@@ -97,11 +97,10 @@ export class RemoteUtils {
     }
 
     static getNavigationLink(route, endPoint){
-      const path = endPoint.split('/').pop().replace(/([A-Z])/g, '/$1').trim();
+      const path = endPoint.split('/').pop();
       let navToUrl = `/project/${route}/${path}`;
       const state = "State";
-      const url = (navToUrl.substring(0, navToUrl.length - state.length));
-      return url;
+      return(navToUrl.substring(0, navToUrl.length - state.length));
     }
 
     static getApiBaseAddress() {

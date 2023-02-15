@@ -18,7 +18,6 @@ TaskScheduler::TaskScheduler(AsyncWebServer* server,
                               int  endTimeHour,
                               int  endTimeMinute,
                               bool    enabled,
-                              int brightness,
                               String  channelName,
                               bool  enableTimeSpan,
                               ChannelMqttSettingsService* channelMqttSettingsService,
@@ -36,8 +35,7 @@ TaskScheduler::TaskScheduler(AsyncWebServer* server,
                               String  activeStartDateRange,
                               String  activeEndDateRange,
                               String buildVersion,
-                              String weekDays,
-                              int analogChannel) :
+                              String weekDays) :
     _channelStateService(server,
                         securityManager,
                         mqttClient,
@@ -53,7 +51,6 @@ TaskScheduler::TaskScheduler(AsyncWebServer* server,
                         endTimeHour,
                         endTimeMinute,
                         enabled,
-                        brightness,
                         channelName,
                         enableTimeSpan,
                         channelMqttSettingsService,
@@ -71,14 +68,12 @@ TaskScheduler::TaskScheduler(AsyncWebServer* server,
                         activeStartDateRange,
                         activeEndDateRange,
                         buildVersion,
-                        weekDays,
-                        analogChannel)
+                        weekDays)
                                        {
-    _isHotScheduleActive = false;
-    _isOverrideActive = false;
+                                         _isHotScheduleActive = false;
+                                         _isOverrideActive = false;
 
     _channelStateService.addUpdateHandler([&](const String& originId) {
-      // Serial.println("TaskScheduler::Handler");
       if(_channelStateService.getChannel().schedule.isOverride){
         this->setOverrideTime();
       }  
@@ -224,7 +219,7 @@ void TaskScheduler::scheduleTaskTicker(ScheduledTime schedule){
 bool TaskScheduler::isScheduleWithInDateRange(String activeStartDateRange,
   String activeEndDateRange, bool enableDateRange, bool activeOutsideDateRange, time_t currentTime){
 
-  if (!enableDateRange){
+  if (!enableDateRange || _isOverrideActive){
     return true;
   }
 
@@ -507,10 +502,6 @@ void TaskScheduler::controlOff(){
   }
 }
 
-void TaskScheduler::changeBrightness(){
-  Serial.println(F("TaskScheduler::changeBrightness"));
-}
-
 void TaskScheduler::setToggleSwitch(bool bToggleSwitch, int toggleReadPin, int blinkLed, int ledOn){
   _toggleReadPin = toggleReadPin;
 
@@ -580,7 +571,7 @@ void TaskScheduler::scheduleRestart(
       overrideControlOff();
     }
   }
-  _channelStateService.mqttRepublish();
+  _channelStateService.mqttRepublish(controlPin, homeAssistantTopicType);
   tickerDetachAll();
   setScheduleTimes();
 
@@ -641,10 +632,6 @@ uint8_t TaskScheduler::getChannelControlPin(){
   return _channelStateService.getChannel().controlPin;
 }
 
-uint8_t TaskScheduler::getBrightness(){
-  return _channelStateService.getChannel().brightness;
-}
-
 uint8_t TaskScheduler::getChannelHomeAssistantTopicType(){
   return _channelStateService.getChannel().homeAssistantTopicType;
 }
@@ -652,8 +639,6 @@ uint8_t TaskScheduler::getChannelHomeAssistantTopicType(){
 bool TaskScheduler::getChannelEnableDateRange(){
   return _channelStateService.getChannel().enableDateRange;
 }
-
-
 
 void TaskScheduler::tickerDetachAll(){
   HotHourTaskTicker.detach();

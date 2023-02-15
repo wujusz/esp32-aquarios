@@ -1,37 +1,37 @@
 import { withStyles } from "@material-ui/core/styles";
-import ToggleButton from "@mui/lab/ToggleButton";
-import ToggleButtonGroup from "@mui/lab/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { blueGrey, yellow } from '@mui/material/colors';
 import { ChannelState } from "../../../redux/types/channel";
 
 const DAYS = [
   {
+    key: "sunday",
+    label: "S"
+  },
+  {
     key: "monday",
-    label: "MO"
+    label: "M"
   },
   {
     key: "tuesday",
-    label: "TU"
+    label: "T"
   },
   {
     key: "wednesday",
-    label: "WE"
+    label: "W"
   },
   {
     key: "thursday",
-    label: "TH"
+    label: "T"
   },
   {
     key: "friday",
-    label: "FR"
+    label: "F"
   },
   {
     key: "saturday",
-    label: "SA"
-  },
-  {
-    key: "sunday",
-    label: "SU"
+    label: "S"
   }
 ];
 
