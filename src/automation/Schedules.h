@@ -10,7 +10,8 @@ class Schedules {
     void beginSchedules();
     void runSchedules();
     void setScheduleTimes();
-
+    int getScheduleCount();
+    
     private:
     std::list<ScheduleTask> _scheduleTaskList;
     void setSchedules();

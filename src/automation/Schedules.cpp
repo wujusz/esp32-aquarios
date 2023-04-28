@@ -14,6 +14,10 @@ void Schedules::addSchedule(ScheduleTask scheduleTask){
     _scheduleTaskList.push_back(scheduleTask);
 };
 
+int Schedules::getScheduleCount() {
+    return _scheduleTaskList.size();
+}
+
 void Schedules::runSchedules(){
     _automation->setSchedules(&_scheduleTaskList);
 };

@@ -50,7 +50,7 @@ class ChannelMqttSettings {
 class ChannelMqttSettingsService : public StatefulService<ChannelMqttSettings> {
  public:
   ChannelMqttSettingsService(AsyncWebServer* server, FS* fs, SecurityManager* securityManager,
-  char* brokerJsonConfigPath, String restBrokerEndPoint, uint8_t channelControlPin, String  channelName,
+  const char* brokerJsonConfigPath, String restBrokerEndPoint, uint8_t channelControlPin, String  channelName,
   String homeAssistantEntity, uint8_t homeAssistantTopicType, String homeAssistantIcon);
   
   void begin();

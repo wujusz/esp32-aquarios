@@ -4,7 +4,7 @@ ChannelScheduleRestartService::ChannelScheduleRestartService(
   AsyncWebServer* server,
   SecurityManager* securityManager,
   TaskScheduler* channel,
-  char* restChannelRestartEndPoint
+  const char* restChannelRestartEndPoint
     ) {
   server->on(restChannelRestartEndPoint,
              HTTP_POST,
