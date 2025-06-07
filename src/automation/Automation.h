@@ -8,7 +8,6 @@
 #include "./TaskScheduler.h"
 #include "./ChannelStateService.h"
 #include "./ChannelScheduleRestartService.h"
-#include "./SystemStateService.h"
 
 #ifdef LILYGO
   #define LED 25
