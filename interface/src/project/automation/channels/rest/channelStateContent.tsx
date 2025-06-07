@@ -19,6 +19,7 @@ import { extractEventValue } from '../../../../utils';
 import { RemoteUtils } from '../../utils/remoteUtils';
 import { DateRangeEnabled } from '../tooltips/DateRangeEnabled';
 import { ActiveOutsideDateRange } from '../tooltips/ActiveOutsideDateRange';
+import { selectAnalogChannel } from "./channelStateForm/selectAnalogChannel";
 import { DateRangePicker } from 'rsuite';
 import { DateRange, DisabledDateFunction } from "rsuite/DateRangePicker";
 import { selectOverrideTime } from './channelStateForm/selectOverrideTime';
@@ -144,6 +145,7 @@ export function channelStateContent(data: ChannelState | undefined,
         {selectHomeAssistantTopicType(data, handleChannelStateValueChange)}
         {selectHomeAssistantIcon(data, handleChannelStateValueChange)}
         {data.homeAssistantTopicType === 2 && selectBrightness(data, handleBrightness)}
+        {selectAnalogChannel(data, handleChannelStateValueChange)}
 
         <BlockFormControlLabel
           control={<Checkbox
