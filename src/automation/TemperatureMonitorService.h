@@ -6,7 +6,6 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include "DataLogger.h"
-#include "FactoryResetService.h"
 
 class TemperatureMonitorService {
  public:
