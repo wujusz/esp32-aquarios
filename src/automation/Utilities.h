@@ -6,7 +6,6 @@
 #include <HttpEndpoint.h>
 #include <SettingValue.h>
 #include "Homeassistant.h"
-#include "channels.h"
 
 #define DEBUG 1
 

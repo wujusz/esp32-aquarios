@@ -1,7 +1,6 @@
 #include "TemperatureMonitorService.h"
 #include <ArduinoJson.h>
 #include "ModuleConfigService.h"
-#include "FactoryResetService.h"
 
 TemperatureMonitorService::TemperatureMonitorService(FS* fs)
     : _fs(fs), _logger(fs) {}

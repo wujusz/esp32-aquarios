@@ -3,114 +3,14 @@
 
 #include "Homeassistant.h"
 
+// Parameter names used by ChannelScheduleRestartService
 #define OLD_CHANNEL_CONTROL_PIN "oldControlPin"
 #define NEW_CHANNEL_CONTROL_PIN "controlPin"
-
-#define OLD_CHANNEL_BRIGHTNESS "oldBrightness"
-#define NEW_CHANNEL_BRIGHTNESS "brightness"
 
 #define OLD_HA_TOPIC_TYPE "oldHomeAssistantTopicType"
 #define NEW_HA_TOPIC_TYPE "homeAssistantTopicType"
 
 #define ENABLE_DATE_RANGE "enableDateRange"
 
-#define TOGGLE_READ_PIN 2
-
-
-#ifdef SINILINK
-  #ifdef CHANNEL_ONE
-    #define CHANNEL_ONE_CONTROL_PIN 4
-  #else
-    #define CHANNEL_ONE_CONTROL_PIN 5
-  #endif
-#else
-  #ifdef ESP32
-    #define CHANNEL_ONE_CONTROL_PIN 21
-  #else
-    #ifdef SONOFF
-      #define CHANNEL_ONE_CONTROL_PIN 12 
-    #else
-      #ifdef ESP01_M
-        #define CHANNEL_ONE_CONTROL_PIN 0 
-      #else
-        #define CHANNEL_ONE_CONTROL_PIN 5 
-      #endif 
-    #endif
-  #endif
 #endif
 
-#define CHANNEL_ONE_REST_ENDPOINT_PATH "/rest/channelOneState"  //restChannelEndPoint
-#define CHANNEL_ONE_SOCKET_PATH "/ws/channelOneState"  // webSocketChannelEndPoint
-#define CHANNEL_ONE_DEFAULT_NAME "Water Pump X" //  defaultChannelName
-#define CHANNEL_ONE_CONFIG_JSON_PATH "/config/channelOneState.json"  // channelJsonConfigPath
-#define CHANNEL_ONE_SCHEDULE_RESTART_SERVICE_PATH "/rest/channelOneScheduleRestart"
-#define CHANNEL_ONE_BROKER_SETTINGS_FILE "/config/C1BrokerSettings.json"
-#define CHANNEL_ONE_BROKER_SETTINGS_PATH "/rest/ChannelOneBrokerSettings"
-#define CHANNEL_ONE_HOME_ASSISTANT_ENTITY "ch1"
-#define CHANNEL_ONE_DEFAULT_ID 1
-#define CHANNEL_ONE_BRIGHTNESS 0
-#define CHANNEL_ONE_DEFAULT_CONTROL_RUN_EVERY 15.0f
-#define CHANNEL_ONE_DEFAULT_CONTROL_OFF_AFTER 3.0f // minimum runtime
-#define CHANNEL_ONE_DEFAULT_CONTROL_START_TIME_HOUR 8
-#define CHANNEL_ONE_DEFAULT_CONTROL_START_TIME_MINUTE 0
-#define CHANNEL_ONE_DEFAULT_CONTROL_END_TIME_HOUR 16
-#define CHANNEL_ONE_DEFAULT_CONTROL_END_TIME_MINUTE 0
-#define CHANNEL_ONE_DEFAULT_ENABLED_STATE true
-#define CHANNEL_ONE_DEFAULT_ENABLE_TIME_SPAN_SCHEDULE false
-#define CHANNEL_ONE_DEFAULT_RANDOMIZE_SCHEDULE false
-#define CHANNEL_ONE_DEFAULT_SPAN_TIME 0.0f    //hotTime hours
-#define CHANNEL_ONE_DEFAULT_OVERRIDE_TIME 15.0f // override time in minutes
-#define CHANNEL_ONE_DEFAULT_ENABLE_MINIMUM_RUN_TIME_SCHEDULE false
-#define CHANNEL_ONE_HOMEASSISTANT_TOPIC_TYPE HOMEASSISTANT_TOPIC_TYPE_SWITCH
-#define CHANNEL_ONE_HOMEASSISTANT_ICON MDI_WATER_PUMP
-#define CHANNEL_ONE_ACTIVE_START_DATE_RANGE DEFAULT_START_DATE_RANGE
-#define CHANNEL_ONE_ACTIVE_END_DATE_RANGE DEFAULT_END_DATE_RANGE
-#define CHANNEL_ONE_ENABLE_DATE_RANGE false
-#define CHANNEL_ONE_ACTIVE_OUTSIDE_DATE_RANGE false
-#define CHANNEL_ONE_ACTIVE_WEEK_DAYS "0,1,2,3,4,5,6"  //sunday through saturday
-
-#ifdef SINILINK
-  #ifdef CHANNEL_TWO
-    #define CHANNEL_TWO_CONTROL_PIN 4
-  #else
-    #define CHANNEL_TWO_CONTROL_PIN 12
-  #endif
-#else
-  #ifdef ESP32
-    #define CHANNEL_TWO_CONTROL_PIN 19
-  #else
-    #define CHANNEL_TWO_CONTROL_PIN 12
-  #endif
-#endif
-
-#define CHANNEL_TWO_REST_ENDPOINT_PATH "/rest/channelTwoState"  //restChannelEndPoint
-#define CHANNEL_TWO_SOCKET_PATH "/ws/channelTwoState"  // webSocketChannelEndPoint
-#define CHANNEL_TWO_DEFAULT_NAME "Living Room Fridge" //  defaultChannelName
-#define CHANNEL_TWO_CONFIG_JSON_PATH "/config/channelTwoState.json"  // channelJsonConfigPath
-#define CHANNEL_TWO_SCHEDULE_RESTART_SERVICE_PATH "/rest/channelTwoScheduleRestart"
-#define CHANNEL_TWO_BROKER_SETTINGS_FILE "/config/C2BrokerSettings.json"
-#define CHANNEL_TWO_BROKER_SETTINGS_PATH "/rest/ChannelTwoBrokerSettings"
-#define CHANNEL_TWO_HOME_ASSISTANT_ENTITY "ch2"
-#define CHANNEL_TWO_DEFAULT_ID 2
-#define CHANNEL_TWO_BRIGHTNESS 0
-#define CHANNEL_TWO_DEFAULT_CONTROL_RUN_EVERY 30.0f
-#define CHANNEL_TWO_DEFAULT_CONTROL_OFF_AFTER 15.0f // minimum runtime
-#define CHANNEL_TWO_DEFAULT_CONTROL_START_TIME_HOUR 8
-#define CHANNEL_TWO_DEFAULT_CONTROL_START_TIME_MINUTE 0
-#define CHANNEL_TWO_DEFAULT_CONTROL_END_TIME_HOUR 18
-#define CHANNEL_TWO_DEFAULT_CONTROL_END_TIME_MINUTE 0
-#define CHANNEL_TWO_DEFAULT_ENABLED_STATE true
-#define CHANNEL_TWO_DEFAULT_ENABLE_TIME_SPAN_SCHEDULE true
-#define CHANNEL_TWO_DEFAULT_RANDOMIZE_SCHEDULE false
-#define CHANNEL_TWO_DEFAULT_SPAN_TIME 0.0f    //hotTime hours
-#define CHANNEL_TWO_DEFAULT_OVERRIDE_TIME 60.0f // override time in minutes
-#define CHANNEL_TWO_DEFAULT_ENABLE_MINIMUM_RUN_TIME_SCHEDULE false
-#define CHANNEL_TWO_HOMEASSISTANT_TOPIC_TYPE HOMEASSISTANT_TOPIC_TYPE_SWITCH
-#define CHANNEL_TWO_HOMEASSISTANT_ICON MDI_FRIDGE
-#define CHANNEL_TWO_ACTIVE_START_DATE_RANGE DEFAULT_START_DATE_RANGE
-#define CHANNEL_TWO_ACTIVE_END_DATE_RANGE DEFAULT_END_DATE_RANGE
-#define CHANNEL_TWO_ENABLE_DATE_RANGE false
-#define CHANNEL_TWO_ACTIVE_OUTSIDE_DATE_RANGE false
-#define CHANNEL_TWO_ACTIVE_WEEK_DAYS "0,1,2,3,4,5,6"
-
-#endif

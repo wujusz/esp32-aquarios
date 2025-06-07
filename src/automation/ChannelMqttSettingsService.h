@@ -4,7 +4,6 @@
 #include <HttpEndpoint.h>
 #include <FSPersistence.h>
 #include <SettingValue.h>
-#include "channels.h"
 #include "ChannelState.h"
 
 class ChannelMqttSettings {

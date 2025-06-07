@@ -8,7 +8,7 @@
 #include "TaskScheduler.h"
 #include "ChannelMqttSettingsService.h"
 #include "ChannelScheduleRestartService.h"
-#include "channels.h"
+#include "Automation.h"
 
 // Extern declarations for objects defined in main.cpp
 extern AsyncWebServer server;

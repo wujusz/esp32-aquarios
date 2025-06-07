@@ -13,7 +13,6 @@
 #include "freertos/task.h"
 #include "freertos/xtensa_api.h"
 #include "esp_err.h"
-#include "channels.h"
 #include "esp32-hal-ledc.h"
 
 class ChannelStateService : public StatefulService<ChannelState> {
