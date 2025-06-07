@@ -1,5 +1,10 @@
 #include <ESP8266React.h>
 #include "./automation/TaskSchedulerHelper.h"
+#include "./automation/ChannelConfigCreateService.h"
+#include "./automation/ModuleConfigCreateService.h"
+#include "./automation/ChannelListService.h"
+#include "./automation/ModuleListService.h"
+#include "./automation/ModuleConfigService.h"
 
 #define SERIAL_BAUD_RATE 115200
 
@@ -8,6 +13,11 @@ ESP8266React esp8266React(&server);
 
 Automation automation = Automation();
 Schedules schedules(&automation);
+ChannelConfigCreateService* channelCreateService;
+ModuleConfigCreateService* moduleCreateService;
+ChannelListService* channelListService;
+ModuleListService* moduleListService;
+ModuleConfigService* moduleConfigService;
 
 void setup() {
   // start serial and filesystem
@@ -15,6 +25,12 @@ void setup() {
 
   // start the framework and demo project
   esp8266React.begin();
+
+  channelCreateService = new ChannelConfigCreateService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
+  moduleCreateService = new ModuleConfigCreateService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
+  channelListService = new ChannelListService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
+  moduleListService = new ModuleListService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
+  moduleConfigService = new ModuleConfigService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
 
   // Tworzenie dynamiczne obiektów TaskScheduler na podstawie plików konfiguracyjnych
   createChannelSchedules("/config", schedules);

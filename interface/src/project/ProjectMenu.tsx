@@ -13,6 +13,7 @@ const ProjectMenu: FC = () => (
   <List>
 {/*     <LayoutMenuItem icon={SettingsRemoteIcon} label="Demo Project" to={`/${PROJECT_PATH}/demo`} /> */}
     <LayoutMenuItem icon={AccessAlarmIcon} label="Automation" to={`/${PROJECT_PATH}/auto`} />
+    <LayoutMenuItem icon={AccessAlarmIcon} label="Modules" to={`/${PROJECT_PATH}/auto/modules`} />
     <LayoutMenuItem icon={BlurCircularIcon} label="Status" to={`/${PROJECT_PATH}/status`} />
   </List>
 );

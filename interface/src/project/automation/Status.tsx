@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles, createStyles } from "@mui/styles";
 import { useLayoutTitle } from '../../components';
@@ -24,20 +24,26 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 const Status: FC = () => {
   const classes = useStyles();
+  const [channels, setChannels] = useState<string[]>([]);
 
   useLayoutTitle("Status");
+
+  useEffect(() => {
+    ChannelApi.fetchChannelListApi()
+      .then((resp) => setChannels(resp.data))
+      .catch((e) => console.error(e));
+  }, []);
+
   return (
     <>
       <div className={classes.flexContainer}>
-        {ChannelApi.channels.map((channelId) => {
-          return (
-            <div className={classes.flexChild}>
-              <div>
-                <div className={classes.muiListItemGutters}><ChannelStateWebSocketForm channelId={channelId} /> </div>
-              </div>
+        {channels.map((channelId) => (
+          <div className={classes.flexChild} key={channelId}>
+            <div className={classes.muiListItemGutters}>
+              <ChannelStateWebSocketForm channelId={channelId} />
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </>
   );

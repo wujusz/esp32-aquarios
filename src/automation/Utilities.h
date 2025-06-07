@@ -2,6 +2,7 @@
 #define Utilities_h
 
 #include <ctime>
+#include <algorithm>
 #include <HttpEndpoint.h>
 #include <SettingValue.h>
 #include "Homeassistant.h"
