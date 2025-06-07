@@ -5,6 +5,8 @@
 #include "./automation/ChannelListService.h"
 #include "./automation/ModuleListService.h"
 #include "./automation/ModuleConfigService.h"
+#include "./automation/SensorLogService.h"
+#include "./automation/TemperatureMonitorService.h"
 
 #define SERIAL_BAUD_RATE 115200
 
@@ -18,6 +20,8 @@ ModuleConfigCreateService* moduleCreateService;
 ChannelListService* channelListService;
 ModuleListService* moduleListService;
 ModuleConfigService* moduleConfigService;
+SensorLogService* sensorLogService;
+TemperatureMonitorService* temperatureMonitorService;
 
 void setup() {
   // start serial and filesystem
@@ -31,6 +35,9 @@ void setup() {
   channelListService = new ChannelListService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
   moduleListService = new ModuleListService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
   moduleConfigService = new ModuleConfigService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
+  sensorLogService = new SensorLogService(&server, esp8266React.getFS(), esp8266React.getSecurityManager());
+  temperatureMonitorService = new TemperatureMonitorService(esp8266React.getFS());
+  temperatureMonitorService->begin();
 
   // Tworzenie dynamiczne obiektów TaskScheduler na podstawie plików konfiguracyjnych
   createChannelSchedules("/config", schedules);

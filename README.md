@@ -9,6 +9,7 @@ AquariOS to system zarządzania dla ESP32/ESP8266 pozwalający w pełni konfigur
 * **Harmonogram** – formularz w UI umożliwia zdefiniowanie wielu okresów działania. Moduły typu LED mogą działać zgodnie ze wschodem i zachodem słońca oraz mają ustawienia jasności dla każdego kanału.
 * **Integracja z Home Assistant** – dzięki MQTT i plikom w `src/automation/Homeassistant.h` kanały mogą być widoczne jako encje w Home Assistant.
 * **REST i WebSocket** – konfigurację kanałów oraz stan można odczytywać i modyfikować przez API REST, a bieżące dane są wysyłane poprzez WebSocket.
+* **Moduł termometru** – odczyt temperatury z czujnika DS18B20, zapisywanie historii i automatyczne sterowanie modułem grzałki.
 
 ## Obsługiwany sprzęt
 
@@ -58,6 +59,7 @@ Poniżej kilka pomysłów zaczerpniętych z projektu [reef-pi](https://github.co
 * monitorowanie temperatury i pH z alarmami,
 * możliwość wykonywania zdjęć akwarium i przesyłania ich do chmury,
 * wykresy i powiadomienia e‑mail.
+* rejestrowanie danych pomiarowych w plikach `/logs` i możliwość wyświetlania wykresów w interfejsie.
 
 Takie funkcje można zrealizować na bazie istniejącej architektury modułów i harmonogramów.
 

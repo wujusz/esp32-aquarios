@@ -44,6 +44,7 @@ void ModuleConfigService::handleUpdate(AsyncWebServerRequest* request, JsonVaria
   JsonObject obj = json.as<JsonObject>();
   String moduleId = obj["id"] | "";
   String moduleName = obj["name"] | "";
+  float targetTemp = obj["targetTemp"] | 0.0f;
   JsonObject scheduleObj = obj["schedule"].as<JsonObject>();
   JsonArray schedulesArr = obj["schedules"].as<JsonArray>();
   JsonArray channels = obj["channels"].as<JsonArray>();

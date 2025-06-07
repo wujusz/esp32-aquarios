@@ -9,6 +9,7 @@ const AddModuleForm: FC = () => {
   const [moduleName, setModuleName] = useState('');
   const [channels, setChannels] = useState('');
   const [useSun, setUseSun] = useState(false);
+  const [targetTemp, setTargetTemp] = useState('');
   const [schedules, setSchedules] = useState<ModuleScheduleState[]>([defaultScheduleState()]);
 
   const addModule = async () => {
@@ -24,7 +25,8 @@ const AddModuleForm: FC = () => {
           moduleName,
           chList,
           schedules.map((s) => s.schedule),
-          useSun
+          useSun,
+          targetTemp ? parseFloat(targetTemp) : undefined
         );
         window.location.reload();
       } catch (e) {
@@ -54,9 +56,14 @@ const AddModuleForm: FC = () => {
       <Select size='small' value={moduleType} onChange={(e) => setModuleType(e.target.value as string)} style={{ marginRight: 8 }}>
         <MenuItem value='lighting'>Lighting</MenuItem>
         <MenuItem value='switch'>Switch</MenuItem>
+        <MenuItem value='heater'>Heater</MenuItem>
+        <MenuItem value='thermometer'>Thermometer</MenuItem>
         <MenuItem value='sensor'>Sensor</MenuItem>
       </Select>
       <FormControlLabel control={<Checkbox checked={useSun} onChange={(e) => setUseSun(e.target.checked)} />} label='Sunrise/Sunset' style={{marginRight: 8}} />
+      {moduleType === 'thermometer' && (
+        <TextField label='Target °C' size='small' type='number' value={targetTemp} onChange={(e) => setTargetTemp(e.target.value)} style={{ marginRight: 8 }} />
+      )}
       <TextField label='Channels (id:pin,...)' size='small' value={channels} onChange={(e) => setChannels(e.target.value)} style={{ marginRight: 8 }} />
       {schedules.map((s, idx) => (
         <div key={idx} style={{ marginTop: 10 }}>
