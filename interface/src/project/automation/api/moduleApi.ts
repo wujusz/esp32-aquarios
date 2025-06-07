@@ -23,6 +23,7 @@ export const createAddModuleApi = (
   channels: ModuleChannel[],
   schedules: ModuleSchedule[],
   useSun?: boolean,
+  targetTemp?: number,
 ): AxiosPromise<void> => {
   return AXIOS.post(`${RemoteUtils.getApiBaseAddress()}createModule`, {
     id: moduleId,
@@ -30,6 +31,7 @@ export const createAddModuleApi = (
     name,
     schedules,
     useSun,
+    targetTemp,
     channels,
   });
 };

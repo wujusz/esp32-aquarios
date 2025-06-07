@@ -23,6 +23,7 @@ void ModuleConfigCreateService::handleCreate(AsyncWebServerRequest* request, Jso
   String moduleId = obj["id"] | "";
   String moduleType = obj["type"] | "switch";
   String moduleName = obj["name"] | "";
+  float targetTemp = obj["targetTemp"] | 0.0f;
   JsonObject scheduleObj = obj["schedule"].as<JsonObject>();
   JsonArray schedulesArr = obj["schedules"].as<JsonArray>();
   JsonArray channels = obj["channels"].as<JsonArray>();

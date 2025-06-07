@@ -4,12 +4,14 @@ import { Table, TableBody, TableCell, TableHead, TableRow, TextField, Button, Ch
 import * as ModuleApi from '../api/moduleApi';
 import { useLayoutTitle, SectionContent } from '../../../components';
 import { ModuleScheduleForm, defaultScheduleState, ModuleScheduleState } from './ModuleScheduleForm';
+import SensorChart from '../sensors/SensorChart';
 
 interface ModuleData {
   id: string;
   name: string;
   type: string;
   useSun?: boolean;
+  targetTemp?: number;
   schedules: ModuleScheduleState[];
   channels: { id: string; pin: number; brightness?: number }[];
 }
@@ -85,6 +87,9 @@ const ModuleDetails: FC = () => {
     <SectionContent title={`Module ${module.id}`} titleGutter>
       <TextField label='Name' size='small' value={module.name} onChange={(e) => setModule({ ...module, name: e.target.value })} style={{ marginRight: 8 }} />
       <FormControlLabel control={<Checkbox checked={module.useSun ?? false} onChange={(e) => setModule({ ...module, useSun: e.target.checked })} />} label='Use Sunrise/Sunset' />
+      {module.type === 'thermometer' && (
+        <TextField label='Target °C' size='small' type='number' value={module.targetTemp ?? ''} onChange={(e) => setModule({ ...module, targetTemp: parseFloat(e.target.value) })} style={{ marginLeft: 8 }} />
+      )}
       {module.schedules.map((s, idx) => (
         <div key={idx} style={{ marginTop: 8 }}>
           <ModuleScheduleForm value={s} onChange={(v) => updateSchedule(idx, v)} />
@@ -126,6 +131,11 @@ const ModuleDetails: FC = () => {
       <div style={{ marginTop: 12 }}>
         <Button variant='contained' color='primary' onClick={save}>Save</Button>
       </div>
+      {module.type === 'thermometer' && (
+        <div style={{ marginTop: 20 }}>
+          <SensorChart id={`temp_${module.id}`} />
+        </div>
+      )}
     </SectionContent>
   );
 };
