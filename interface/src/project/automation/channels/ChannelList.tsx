@@ -14,6 +14,8 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import * as ChannelApi from '../api/channelApi';
 import { RemoteUtils } from '../utils/remoteUtils';
+import AddChannelForm from './AddChannelForm';
+import AddModuleForm from './AddModuleForm';
 
 const ChannelListForm: FC = () => {
   const [list, setList] = useState<any[]>([]);
@@ -30,9 +32,12 @@ const ChannelListForm: FC = () => {
   };
 
   useEffect(() => {
-    Promise.all(ChannelApi.channels.map((channel) => getChannelData(channel))).then((resolvedChannels) => {
-      setList(resolvedChannels)
-    })
+    ChannelApi.fetchChannelListApi().then((resp) => {
+      const ids: string[] = resp.data;
+      return Promise.all(ids.map((id) => getChannelData(id)));
+    }).then((resolved) => {
+      setList(resolved);
+    }).catch((e) => console.error(e));
   }, [])
 
   useLayoutTitle("Channels");
@@ -97,6 +102,8 @@ const ChannelListForm: FC = () => {
   return (
     <SectionContent title='Manage Channels' titleGutter>
       {content()}
+      <AddChannelForm />
+      <AddModuleForm />
     </SectionContent>
   );
 };
